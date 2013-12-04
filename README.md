@@ -104,6 +104,8 @@ class Module
     }
 ```
 
+4. Visit `http://pathtozf2/error`
+
 ## Event log
 
 1.Create log table:
