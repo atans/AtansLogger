@@ -1,5 +1,7 @@
 <?php
-$title = $this->translate('系統錯誤日誌');
+namespace AtansLogger;
+
+$title = $this->translate('Error log', __NAMESPACE__);
 $this->headTitle($title);
 
 $pagination = '';
@@ -34,7 +36,7 @@ if (count($this->paginator)) {
             <thead>
             <tr>
                 <th class="col-lg-1 col-md-1 col-sm-1">#</th>
-                <th class="col-lg-11 col-md-11 col-sm-11"><?php echo $this->translate('錯誤') ?></th>
+                <th class="col-lg-11 col-md-11 col-sm-11"><?php echo $this->translate('Error', __NAMESPACE__) ?></th>
             </tr>
             </thead>
             <?php
@@ -49,7 +51,7 @@ if (count($this->paginator)) {
             <br>
 
             <div class="alert alert-info">
-                <?php echo $this->translate('找不到任何錯誤') ?>
+                <?php echo $this->translate('Could not find any logs', __NAMESPACE__) ?>
             </div>
         </div>
     <?php endif ?>

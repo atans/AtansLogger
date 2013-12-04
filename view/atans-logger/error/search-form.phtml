@@ -1,4 +1,6 @@
 <?php
+namespace AtansLogger;
+
 $form = $this->form;
 $form->setAttribute('action', $this->url('error'));
 $form->prepare();
@@ -7,7 +9,7 @@ $form->prepare();
     <div class="form-group">
         <div class="input-group">
             <div class="input-group-addon">
-                <?php echo $this->translate('數量') ?>
+                <?php echo $this->translate('Count per page', __NAMESPACE__) ?>
             </div>
             <?php echo $this->formInput($form->get('size')) ?>
         </div>

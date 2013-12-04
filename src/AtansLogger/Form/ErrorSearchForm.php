@@ -8,6 +8,8 @@ use ZfcBase\Form\ProvidesEventsForm;
 
 class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
+    const TRANSLATOR_TEXT_DOMAIN = 'AtansLogger';
+
     /**
      * @var ServiceManager
      */
@@ -21,6 +23,7 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $this->setAttribute('role', 'form');
 
         $this->setServiceManager($serviceManager);
+        $translator = $this->getServiceManager()->get('Translator');
 
         $page = new Element\Hidden('page');
         $this->add($page);
@@ -28,7 +31,7 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $priority = new Element\Select('priority');
         $priority->setAttribute('class', 'form-control');
         $priority->setOptions(array(
-            'empty_option' => 'Priority',
+            'empty_option' => $translator->translate('Priority', static::TRANSLATOR_TEXT_DOMAIN),
             'value_options' => $this->getServiceManager()->get('zend_log_logger_priorities'),
         ));
         $this->add($priority);

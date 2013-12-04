@@ -1,0 +1,52 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Atans User\n"
+"POT-Creation-Date: 2013-12-04 15:51+0800\n"
+"PO-Revision-Date: 2013-12-04 15:51+0800\n"
+"Last-Translator: atans <atans.chiu@gmail.com>\n"
+"Language-Team: atans <atans.chiu@gmail.com>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: translate;setLabel\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../src/AtansLogger/Form/ErrorSearchForm.php:34
+msgid "Priority"
+msgstr ""
+
+#: ../view/atans-logger/error/index.phtml:4
+msgid "Error log"
+msgstr "錯誤日誌"
+
+#: ../view/atans-logger/error/index.phtml:39
+msgid "Error"
+msgstr "錯誤"
+
+#: ../view/atans-logger/error/index.phtml:54
+msgid "Could not find any logs"
+msgstr "找不到任何日誌"
+
+#: ../view/atans-logger/error/partial.phtml:17
+msgid "Date"
+msgstr "日期"
+
+#: ../view/atans-logger/error/partial.phtml:18
+msgid "File"
+msgstr "文件"
+
+#: ../view/atans-logger/error/partial.phtml:19
+msgid "Line"
+msgstr "行數"
+
+#: ../view/atans-logger/error/partial.phtml:20
+msgid "Message"
+msgstr "信息"
+
+#: ../view/atans-logger/error/search-form.phtml:12
+msgid "Count per page"
+msgstr "數量"

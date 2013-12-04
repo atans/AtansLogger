@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Log
  *
- * @ORM\Entity(repositoryClass="ErrorRepository")
+ * @ORM\Entity(repositoryClass="ErrorRepository", readOnly=true)
  * @ORM\Table(
  *   name="error",
  *   options={"collate"="utf8_general_ci"}

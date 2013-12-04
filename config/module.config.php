@@ -33,6 +33,16 @@ return array(
             ),
         ),
     ),
+    'translator' => array(
+        'translation_file_patterns' => array(
+            array(
+                'type' => 'gettext',
+                'base_dir' => __DIR__ . '/../languages',
+                'pattern' => '%s.mo',
+                'text_domain' => __NAMESPACE__,
+            ),
+        ),
+    ),
     'controllers' => array(
         'invokables' => array(
             'AtansLogger\Controller\Error' => 'AtansLogger\Controller\ErrorController',

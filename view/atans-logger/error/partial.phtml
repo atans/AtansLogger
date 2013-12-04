@@ -1,4 +1,6 @@
 <?php
+namespace AtansLogger;
+
 $date = new \DateTime($log->getDate());
 
 $priority = isset($loggerPriorities[$log->getPriority()]) ?  $loggerPriorities[$log->getPriority()] : 'UNKNOWN';
@@ -12,10 +14,10 @@ $priority = isset($loggerPriorities[$log->getPriority()]) ?  $loggerPriorities[$
         <label class="label label-danger"><?php echo $this->escapeHtml($priority) ?></label>
         <p>
             <small>
-                Date: <?php echo $date->format('Y/m/d H:i:s') ?><br>
-                File: <?php echo $this->escapeHtml($log->getFile()) ?><br>
-                Line: <?php echo $this->escapeHtml($log->getLine()) ?><br>
-                Message: <?php echo $this->escapeHtml($log->getMessage()) ?>
+                <?php echo $this->translate('Date', __NAMESPACE__) ?>: <?php echo $date->format('Y/m/d H:i:s') ?><br>
+                <?php echo $this->translate('File', __NAMESPACE__) ?>: <?php echo $this->escapeHtml($log->getFile()) ?><br>
+                <?php echo $this->translate('Line', __NAMESPACE__) ?>: <?php echo $this->escapeHtml($log->getLine()) ?><br>
+                <?php echo $this->translate('Message', __NAMESPACE__) ?>: <?php echo $this->escapeHtml($log->getMessage()) ?>
             </small>
         </p>
 
