@@ -1,0 +1,34 @@
+{
+    "name": "atans/atans-logger",
+    "description" : "Simple event logger for Zend Framework 2",
+    "type" : "library",
+    "keywords" : [
+        "zf2",
+        "module"
+    ],
+    "homepage": "https://github.com/atans/AtansLogger",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Atans Chiu",
+            "email": "atans.chiu@gmail.com",
+            "homepage": "https://github.com/atans"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": ">=2.2.1",
+        "doctrine/doctrine-module": "0.8.x-dev",
+        "doctrine/doctrine-orm-module": "0.8.*@dev",
+        "zf-commons/zfc-base": "0.1.*",
+        "atans/atans-common" : "0.1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "AtansLogger": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}

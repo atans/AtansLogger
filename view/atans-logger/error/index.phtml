@@ -1,0 +1,69 @@
+<?php
+$title = $this->translate('系統錯誤日誌');
+$this->headTitle($title);
+
+$pagination = '';
+if (count($this->paginator)) {
+    $pagination =  $this->paginationControl(
+        $this->paginator,
+        'Sliding',
+        'pagination/query',
+        array(
+            'route' => 'error',
+            'options' => array(
+                'query' => $form->getData(),
+            ),
+        )
+    );
+}
+
+?>
+
+<h4 class="page-header">
+    <?php echo $this->escapeHtml($title) ?>
+</h4>
+
+<?php echo $pagination ; ?>
+<div class="panel panel-default">
+    <?php if (count($paginator) > 0): ?>
+        <div class="panel-body">
+            <?php echo $this->render('atans-logger/error/search-form', array('form' => $form)) ?>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="col-lg-1 col-md-1 col-sm-1">#</th>
+                <th class="col-lg-11 col-md-11 col-sm-11"><?php echo $this->translate('錯誤') ?></th>
+            </tr>
+            </thead>
+            <?php
+            foreach ($paginator as $log){
+                echo $this->partial('atans-logger/error/partial', array('log' => $log, 'loggerPriorities' => $this->loggerPriorities));
+            }
+            ?>
+        </table>
+    <?php else: ?>
+        <div class="panel-body">
+            <?php echo $this->render('atans-logger/error/search-form', array('form' => $form)) ?>
+            <br>
+
+            <div class="alert alert-info">
+                <?php echo $this->translate('找不到任何錯誤') ?>
+            </div>
+        </div>
+    <?php endif ?>
+</div>
+
+<?php echo $pagination ; ?>
+
+<?php echo $this->headScript()->captureStart() ?>
+seajs.use('$', function($){
+    var $form = $('#<?php echo $form->getName() ?>');
+    $('select[name="priority"]', $form).change(function(){
+        $form.submit();
+    });
+});
+<?php echo $this->headScript()->captureEnd() ?>
+
+

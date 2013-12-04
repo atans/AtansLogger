@@ -1,0 +1,28 @@
+<?php
+$date = new \DateTime($log->getDate());
+
+$priority = isset($loggerPriorities[$log->getPriority()]) ?  $loggerPriorities[$log->getPriority()] : 'UNKNOWN';
+?>
+
+<tr>
+    <td>
+        <?php echo $this->escapeHtml($log->getId()) ?>
+    </td>
+    <td>
+        <label class="label label-danger"><?php echo $this->escapeHtml($priority) ?></label>
+        <p>
+            <small>
+                Date: <?php echo $date->format('Y/m/d H:i:s') ?><br>
+                File: <?php echo $this->escapeHtml($log->getFile()) ?><br>
+                Line: <?php echo $this->escapeHtml($log->getLine()) ?><br>
+                Message: <?php echo $this->escapeHtml($log->getMessage()) ?>
+            </small>
+        </p>
+
+        <?php if ($trace = $log->getTrace()): ?>
+        <blockquote>
+            <?php echo nl2br($this->escapeHtml($trace)) ?>
+        </blockquote>
+        <?php endif ?>
+    </td>
+</tr>

@@ -1,0 +1,30 @@
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('error'));
+$form->prepare();
+?>
+<?php echo $this->form()->openTag($form) ?>
+    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <?php echo $this->translate('數量') ?>
+            </div>
+            <?php echo $this->formInput($form->get('size')) ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <?php echo $this->formSelect($form->get('priority')) ?>
+    </div>
+
+    <div class="form-group">
+        <div class="input-group">
+            <?php echo $this->formInput($form->get('query')) ?>
+            <div class="input-group-btn">
+                <button class="btn btn-default">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+<?php echo $this->form()->closeTag(); ?>
