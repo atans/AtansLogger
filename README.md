@@ -5,7 +5,22 @@ Simple event logger for Zend Framework 2
 
 ## Error log
 
-1.Add follow code to `config/autoload/global.php`
+1. Create error table
+
+```sql
+CREATE TABLE IF NOT EXISTS `error` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` varchar(50) NOT NULL,
+  `priority` int(11) NOT NULL,
+  `message` longtext NOT NULL,
+  `file` varchar(255) DEFAULT NULL,
+  `line` int(5) DEFAULT NULL,
+  `trace` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+```
+
+2.Add follow code to `config/autoload/global.php`
 
 ```php
     /**
@@ -39,7 +54,7 @@ Simple event logger for Zend Framework 2
     ),
 ```
 
-2. Edit `module/Application/Module.php`
+3. Edit `module/Application/Module.php`
 
 ```php
 class Module
@@ -88,8 +103,6 @@ class Module
         }
     }
 ```
-
-
 
 ## Event log
 
