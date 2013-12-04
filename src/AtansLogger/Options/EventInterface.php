@@ -1,7 +1,7 @@
 <?php
 namespace AtansLogger\Options;
 
-interface EventServiceInterface
+interface EventInterface
 {
     /**
      * Set enable event service

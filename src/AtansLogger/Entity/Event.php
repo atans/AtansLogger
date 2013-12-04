@@ -6,16 +6,16 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Log
+ * Event
  *
  * @ORM\Entity
  * @ORM\Table(
- *   name="log",
+ *   name="event_log",
  *   options={"collate"="utf8_general_ci"},
  *   indexes={@ORM\Index(name="search_index", columns={"target", "name", "object_id", "ip_address"})}
  * )
  */
-class Log
+class Event
 {
     /**
      * @ORM\Id

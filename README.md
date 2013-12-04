@@ -8,7 +8,7 @@ Simple event logger for Zend Framework 2
 1. Create error table
 
 ```sql
-CREATE TABLE IF NOT EXISTS `error` (
+CREATE TABLE IF NOT EXISTS `error_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` varchar(50) NOT NULL,
   `priority` int(11) NOT NULL,
@@ -111,7 +111,7 @@ class Module
 1.Create log table:
 
 ```sql
-CREATE TABLE IF NOT EXISTS `log` (
+CREATE TABLE IF NOT EXISTS `event_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `target` varchar(155) NOT NULL,
   `name` varchar(50) NOT NULL,
