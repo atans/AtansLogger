@@ -1,6 +1,8 @@
 Atans Logger
 ============
 
+Simple event logger for Zend Framework 2
+
 ## Error log
 
 1.Add follow code to `config/autoload/global.php`
