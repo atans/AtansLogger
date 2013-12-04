@@ -47,6 +47,8 @@ class Module
         // code...
 
         // Log error
+        $eventManager = $e->getApplication()->getEventManager();
+
         $e->getApplication()->getServiceManager()->get('Zend\Log\Logger');
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'exceptionHandler'));
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'exceptionHandler'));
