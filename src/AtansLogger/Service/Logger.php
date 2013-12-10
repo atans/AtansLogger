@@ -4,7 +4,6 @@ namespace AtansLogger\Service;
 use AtansUser\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManager;
-use AtansLogger\Entity\Log;
 use Zend\Authentication\AuthenticationService;
 use Zend\Http\Request;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -51,17 +50,17 @@ class Logger implements ServiceLocatorAwareInterface
         $ipAddress = $this->getRequest()->getServer('REMOTE_ADDR');
         $username  = $createdBy ? $createdBy->getUsername() : null;
 
-        $log = new Log();
-        $log->setTarget($target)
-            ->setName($name)
-            ->setMessage($message)
-            ->setObjectId($objectId)
-            ->setCreated(new DateTime())
-            ->setCreatedBy($createdBy)
-            ->setIpAddress($ipAddress)
-            ->setUsername($username);
+        $event = new \AtansLogger\Entity\Event();
+        $event->setTarget($target)
+              ->setName($name)
+              ->setMessage($message)
+              ->setObjectId($objectId)
+              ->setCreated(new DateTime())
+              ->setCreatedBy($createdBy)
+              ->setIpAddress($ipAddress)
+              ->setUsername($username);
 
-        $this->getEntityManager()->persist($log);
+        $this->getEntityManager()->persist($event);
         $this->getEntityManager()->flush();
 
         return true;

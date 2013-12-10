@@ -1,6 +1,7 @@
 <?php
 namespace AtansLogger\Controller;
 
+use AtansLogger\Options\ErrorInterface;
 use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -24,6 +25,11 @@ class ErrorController extends AbstractActionController
      */
     protected $errorSearchForm;
 
+    /**
+     * @var ErrorInterface
+     */
+    protected $options;
+
     public function indexAction()
     {
         $entityManager = $this->getEntityManager();
@@ -33,7 +39,7 @@ class ErrorController extends AbstractActionController
             'priority' => $request->getQuery('priority', ''),
             'query'    => $request->getQuery('query', ''),
             'page'     => $request->getQuery('page', 1),
-            'size'     => $request->getQuery('size', 10),
+            'count'    => $request->getQuery('count', $this->getOptions()->getErrorCountPerPage()),
         );
 
         $form = $this->getErrorSearchForm();
@@ -97,6 +103,31 @@ class ErrorController extends AbstractActionController
     public function setErrorSearchForm(Form $errorSearchForm)
     {
         $this->errorSearchForm = $errorSearchForm;
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return ErrorInterface
+     */
+    public function getOptions()
+    {
+        if (! $this->options instanceof ErrorInterface) {
+            $this->setOptions($this->getServiceLocator()->get('atanslogger_module_options'));
+        }
+        return $this->options;
+    }
+
+    /**
+     * Set options
+     *
+     * @param  ErrorInterface $options
+     * @return ErrorController
+     */
+    public function setOptions(ErrorInterface $options)
+    {
+        $this->options = $options;
         return $this;
     }
 }

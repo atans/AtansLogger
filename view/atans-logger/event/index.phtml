@@ -1,7 +1,7 @@
 <?php
 namespace AtansLogger;
 
-$title = $this->translate('Error log', __NAMESPACE__);
+$title = $this->translate('Event log', __NAMESPACE__);
 $this->headTitle($title);
 
 $pagination = '';
@@ -11,7 +11,7 @@ if (count($this->paginator)) {
         'Sliding',
         'pagination/query',
         array(
-            'route' => 'error',
+            'route' => 'event',
             'options' => array(
                 'query' => $form->getData(),
             ),

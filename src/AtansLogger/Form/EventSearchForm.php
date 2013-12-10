@@ -1,12 +1,13 @@
 <?php
 namespace AtansLogger\Form;
 
+use AtansLogger\Service\Event as EventService;
 use Zend\Form\Element;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
 
-class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
+class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
     const TRANSLATOR_TEXT_DOMAIN = 'AtansLogger';
 
@@ -15,26 +16,36 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
      */
     protected $serviceManager;
 
+    /**
+     * @var EventService
+     */
+    protected $eventService;
+
     public function __construct(ServiceManager $serviceManager)
     {
-        parent::__construct('error-search-form');
+        parent::__construct('event-search-form');
         $this->setAttribute('method', 'get');
         $this->setAttribute('class', 'form-inline');
         $this->setAttribute('role', 'form');
 
         $this->setServiceManager($serviceManager);
-        $translator = $this->getServiceManager()->get('Translator');
+        $translator   = $this->getServiceManager()->get('Translator');
 
         $page = new Element\Hidden('page');
         $this->add($page);
 
-        $priority = new Element\Select('priority');
-        $priority->setAttribute('class', 'form-control');
-        $priority->setOptions(array(
-            'empty_option' => $translator->translate('Priority', static::TRANSLATOR_TEXT_DOMAIN),
-            'value_options' => $this->getServiceManager()->get('zend_log_logger_priorities'),
+        $events = array();
+        foreach ($this->getEventService()->getEvents() as $class => $callback) {
+            $events[$class] = $class;
+        }
+
+        $target = new Element\Select('target');
+        $target->setAttribute('class', 'form-control');
+        $target->setOptions(array(
+            'empty_option' => sprintf('== %s ==', $translator->translate('Target', static::TRANSLATOR_TEXT_DOMAIN)),
+            'value_options' => $events,
         ));
-        $this->add($priority);
+        $this->add($target);
 
         $size = new Element\Text('count');
         $size->setAttributes(array(
@@ -63,10 +74,10 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
                     array('name' => 'Int'),
                 ),
             ),
-            'priority' => array(
+            'target' => array(
                 'required' => false,
             ),
-            'size' => array(
+            'count' => array(
                 'required' => false,
                 'filters' => array(
                     array('name' => 'Int'),
@@ -101,6 +112,31 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     public function setServiceManager(ServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
+        return $this;
+    }
+
+    /**
+     * Get eventService
+     *
+     * @return EventService
+     */
+    public function getEventService()
+    {
+        if (! $this->eventService instanceof EventService) {
+            $this->setEventService($this->getServiceManager()->get('atanslogger_event_service'));
+        }
+        return $this->eventService;
+    }
+
+    /**
+     * Set eventService
+     *
+     * @param  EventService $eventService
+     * @return EventSearchForm
+     */
+    public function setEventService($eventService)
+    {
+        $this->eventService = $eventService;
         return $this;
     }
 }

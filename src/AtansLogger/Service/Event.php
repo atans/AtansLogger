@@ -10,6 +10,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class Event implements ServiceLocatorAwareInterface
 {
     /**
+     * @var array
+     */
+    protected $events;
+
+    /**
      * @var SharedEventManagerInterface
      */
     protected $sharedEventManager;
@@ -75,9 +80,20 @@ class Event implements ServiceLocatorAwareInterface
             ));
         }
 
-        $events = $this->getEvents($callbackClass);
+        $this->events[$id] = $eventCallbackClass;
+
+        $events = $this->getEventNames($callbackClass);
         foreach ($events as $method => $event) {
+            if (! is_callable(array($callbackClass, $method))) {
+                throw new Exception\RuntimeException(sprintf(
+                    '%s::%s is not callable',
+                    $eventCallbackClass,
+                    $method
+                ));
+            }
+
             $callback = $callbackClass->$method();
+
             if (!is_callable($callback)) {
                 throw new Exception\RuntimeException(sprintf(
                     '%s::%s should return callable variable',
@@ -93,12 +109,22 @@ class Event implements ServiceLocatorAwareInterface
     }
 
     /**
+     * Get events
+     *
+     * @return array
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
      * Get events from callback class
      *
      * @param AbstractCallback $callback
      * @return array
      */
-    public  function getEvents(AbstractCallback $callback)
+    public  function getEventNames(AbstractCallback $callback)
     {
         $methods = get_class_methods($callback);
         $events = array();

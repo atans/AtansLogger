@@ -4,6 +4,21 @@ namespace AtansLogger\Options;
 interface EventInterface
 {
     /**
+     * Set event count per page
+     *
+     * @param  int $eventCountPerPage
+     * @return ModuleOptions
+     */
+    public function setEventCountPerPage($eventCountPerPage);
+
+    /**
+     * Get event count per page
+     *
+     * @return int
+     */
+    public function getEventCountPerPage();
+
+    /**
      * Set enable event service
      *
      * @param  bool $enableEventService

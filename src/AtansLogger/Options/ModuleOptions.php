@@ -4,7 +4,8 @@ namespace AtansLogger\Options;
 use Zend\Stdlib\AbstractOptions;
 
 class ModuleOptions extends AbstractOptions implements
-    EventServiceInterface
+    ErrorInterface,
+    EventInterface
 {
     /**
      * Turn off strict options mode
@@ -12,14 +13,69 @@ class ModuleOptions extends AbstractOptions implements
     protected $__strictMode__ = false;
 
     /**
+     * @var int
+     */
+    protected $errorCountPerPage = 10;
+
+    /**
+     * @var int
+     */
+    protected $eventCountPerPage = 10;
+
+    /**
      * @var bool
      */
-    protected $enableEventService;
+    protected $enableEventService = true;
 
     /**
      * @var array
      */
     protected $events = array();
+
+    /**
+     * Set errorCountPerPage
+     *
+     * @param  int $errorCountPerPage
+     * @return ModuleOptions
+     */
+    public function setErrorCountPerPage($errorCountPerPage)
+    {
+        $this->errorCountPerPage = (int) $errorCountPerPage;
+        return $this;
+    }
+
+    /**
+     * Get errorCountPerPage
+     *
+     * @return int
+     */
+    public function getErrorCountPerPage()
+    {
+        return $this->errorCountPerPage;
+    }
+
+    /**
+     * Set eventCountPerPage
+     *
+     * @param  int $eventCountPerPage
+     * @return ModuleOptions
+     */
+    public function setEventCountPerPage($eventCountPerPage)
+    {
+        $this->eventCountPerPage = (int) $eventCountPerPage;
+
+        return $this;
+    }
+
+    /**
+     * Get eventCountPerPage
+     *
+     * @return int
+     */
+    public function getEventCountPerPage()
+    {
+        return $this->eventCountPerPage;
+    }
 
     /**
      * Set enableEventService
@@ -29,8 +85,7 @@ class ModuleOptions extends AbstractOptions implements
      */
     public function setEnableEventService($enableEventService)
     {
-        $this->enableEventService = $enableEventService;
-
+        $this->enableEventService = (bool) $enableEventService;
         return $this;
     }
 
@@ -53,7 +108,6 @@ class ModuleOptions extends AbstractOptions implements
     public function setEvents(array $events)
     {
         $this->events = $events;
-
         return $this;
     }
 

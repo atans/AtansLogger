@@ -4,11 +4,11 @@ namespace AtansLogger\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Log
+ * Error
  *
  * @ORM\Entity(repositoryClass="ErrorRepository", readOnly=true)
  * @ORM\Table(
- *   name="error",
+ *   name="error_log",
  *   options={"collate"="utf8_general_ci"}
  * )
  */

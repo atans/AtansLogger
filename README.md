@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `error_log` (
                                 'trace' => 'trace',
                             ),
                         ),
-                        'table' => 'error',
+                        'table' => 'error_log',
                         'db' => 'Zend\Db\Adapter\Adapter',
                     ),
                 ),
