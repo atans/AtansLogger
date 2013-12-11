@@ -31,7 +31,7 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $priority = new Element\Select('priority');
         $priority->setAttribute('class', 'form-control');
         $priority->setOptions(array(
-            'empty_option' => $translator->translate('Priority', static::TRANSLATOR_TEXT_DOMAIN),
+            'empty_option' => sprintf('== %s ==', $translator->translate('Priority', static::TRANSLATOR_TEXT_DOMAIN)),
             'value_options' => $this->getServiceManager()->get('zend_log_logger_priorities'),
         ));
         $this->add($priority);
