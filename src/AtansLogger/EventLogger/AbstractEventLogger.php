@@ -1,5 +1,5 @@
 <?php
-namespace AtansLogger\Callback;
+namespace AtansLogger\EventLogger;
 
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
@@ -7,7 +7,7 @@ use AtansLogger\Service\Logger as LoggerService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-abstract class AbstractCallback implements ServiceLocatorAwareInterface
+abstract class AbstractEventLogger implements ServiceLocatorAwareInterface
 {
     /**
      * @var DoctrineHydrator

@@ -2,7 +2,9 @@
 namespace AtansLogger\Controller;
 
 use AtansLogger\Options\EventInterface;
+use AtansLogger\Service\Event as EventService;
 use Doctrine\ORM\EntityManager;
+use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class EventController extends AbstractActionController
@@ -20,6 +22,16 @@ class EventController extends AbstractActionController
     );
 
     /**
+     * @var Form
+     */
+    protected $eventSearchForm;
+
+    /**
+     * @var EventService
+     */
+    protected $eventService;
+
+    /**
      * @var EventInterface
      */
     protected $options;
@@ -29,18 +41,35 @@ class EventController extends AbstractActionController
         $entityManager = $this->getEntityManager();
         $request       = $this->getRequest();
 
+        $eventRepository = $entityManager->getRepository($this->entities['Event']);
+
         $data = array(
-            'target'   => $request->getQuery('target', ''),
-            'query'    => $request->getQuery('query', ''),
-            'page'     => $request->getQuery('page', 1),
-            'count'    => $request->getQuery('count', $this->getOptions()->getEventCountPerPage()),
+            'target'    => $request->getQuery('target', ''),
+            'name'      => $request->getQuery('name', ''),
+            'query'     => $request->getQuery('query', ''),
+            'page'      => $request->getQuery('page', 1),
+            'objectId'  => $request->getQuery('objectId', ''),
+            'createdBy' => $request->getQuery('createdBy', ''),
+            'count'     => $request->getQuery('count', $this->getOptions()->getEventCountPerPage()),
         );
 
-        $form = $this->getErrorSearchForm();
+        $eventService = $this->getEventService();
+        $events       = $eventService->getEvents();
+
+        $form = $this->getEventSearchForm();
+        if ($data['target'] && isset($events[$data['target']])) {
+            $eventNames = $eventService->getEventNames($events[$data['target']]);
+            $names = array();
+            foreach ($eventNames as $eventName) {
+                $names[$eventName] = $eventName;
+            }
+
+            $form->get('name')->setValueOptions($names);
+        }
         $form->setData($data);
         $form->isValid();
 
-        $paginator = $entityManager->getRepository($this->entities['Event'])->pagination($form->getData());
+        $paginator = $eventRepository->pagination($form->getData());
 
         return array(
             'form'      => $form,
@@ -70,6 +99,56 @@ class EventController extends AbstractActionController
     public function setEntityManager(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+        return $this;
+    }
+
+    /**
+     * Get eventSearchForm
+     *
+     * @return Form
+     */
+    public function getEventSearchForm()
+    {
+        if (! $this->eventSearchForm instanceof Form) {
+            $this->setEventSearchForm($this->getServiceLocator()->get('atanslogger_event_search_form'));
+        }
+        return $this->eventSearchForm;
+    }
+
+    /**
+     * Set eventSearchForm
+     *
+     * @param  Form $eventSearchForm
+     * @return EventController
+     */
+    public function setEventSearchForm(Form $eventSearchForm)
+    {
+        $this->eventSearchForm = $eventSearchForm;
+        return $this;
+    }
+
+    /**
+     * Get eventService
+     *
+     * @return EventService
+     */
+    public function getEventService()
+    {
+        if (! $this->eventService instanceof EventService) {
+            $this->setEventService($this->getServiceLocator()->get('atanslogger_event_service'));
+        }
+        return $this->eventService;
+    }
+
+    /**
+     * Set eventService
+     *
+     * @param  EventService $eventService
+     * @return EventController
+     */
+    public function setEventService(EventService $eventService)
+    {
+        $this->eventService = $eventService;
         return $this;
     }
 

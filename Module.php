@@ -47,6 +47,9 @@ class Module
                 'atanslogger_error_search_form' => function ($sm) {
                     return new Form\ErrorSearchForm($sm);
                 },
+                'atanslogger_event_search_form' => function ($sm) {
+                        return new Form\EventSearchForm($sm);
+                },
                 'zend_log_logger_priorities' => function ($sm) {
                     return array(
                         \Zend\Log\Logger::EMERG  => 'EMERG',

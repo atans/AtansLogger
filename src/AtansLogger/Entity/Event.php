@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Event
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EventRepository")
  * @ORM\Table(
  *   name="event_log",
  *   options={"collate"="utf8_general_ci"},
@@ -98,7 +98,7 @@ class Event
      * Set target
      *
      * @param  string $target
-     * @return Log
+     * @return Event
      */
     public function setTarget($target)
     {
@@ -120,7 +120,7 @@ class Event
      * Set name
      *
      * @param  string $name
-     * @return Log
+     * @return Event
      */
     public function setName($name)
     {
@@ -142,7 +142,7 @@ class Event
      * Set message
      *
      * @param  string $message
-     * @return Log
+     * @return Event
      */
     public function setMessage($message)
     {
@@ -154,7 +154,7 @@ class Event
      * Set objectId
      *
      * @param  int $objectId
-     * @return Log
+     * @return Event
      */
     public function setObjectId($objectId)
     {
@@ -186,7 +186,7 @@ class Event
      * Set ipAddress
      *
      * @param  string $ipAddress
-     * @return Log
+     * @return Event
      */
     public function setIpAddress($ipAddress)
     {
@@ -208,7 +208,7 @@ class Event
      * Set created
      *
      * @param  DateTime $created
-     * @return Log
+     * @return Event
      */
     public function setCreated($created)
     {
@@ -230,7 +230,7 @@ class Event
      * Set createdBy
      *
      * @param  User $createdBy
-     * @return Log
+     * @return Event
      */
     public function setCreatedBy($createdBy)
     {
@@ -252,7 +252,7 @@ class Event
      * Set username
      *
      * @param  string $username
-     * @return Log
+     * @return Event
      */
     public function setUsername($username)
     {

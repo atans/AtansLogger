@@ -2,6 +2,7 @@
 namespace AtansLogger\Form;
 
 use AtansLogger\Service\Event as EventService;
+use Doctrine\ORM\EntityManager;
 use Zend\Form\Element;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceManager;
@@ -10,6 +11,18 @@ use ZfcBase\Form\ProvidesEventsForm;
 class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
     const TRANSLATOR_TEXT_DOMAIN = 'AtansLogger';
+
+    /**
+     * @var array
+     */
+    protected $entities = array(
+        'Event' => 'AtansLogger\Entity\Event',
+    );
+
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
 
     /**
      * @var ServiceManager
@@ -34,6 +47,22 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $page = new Element\Hidden('page');
         $this->add($page);
 
+        $createdBy = new Element\Select('createdBy');
+        $createdBy->setAttributes(array(
+            'class' => 'form-control',
+        ))->setOptions(array(
+            'empty_option' => sprintf('== %s ==', $translator->translate('Creator', static::TRANSLATOR_TEXT_DOMAIN)),
+            'value_options' => $this->getEntityManager()->getRepository($this->entities['Event'])->findCreators()
+        ));
+        $this->add($createdBy);
+
+        $objectId = new Element\Text('objectId');
+        $objectId->setAttributes(array(
+            'class' => 'form-control',
+            'style' => 'width: 60px;'
+        ));
+        $this->add($objectId);
+
         $events = array();
         foreach ($this->getEventService()->getEvents() as $class => $callback) {
             $events[$class] = $class;
@@ -46,6 +75,14 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
             'value_options' => $events,
         ));
         $this->add($target);
+
+        $name = new Element\Select('name');
+        $name->setAttribute('class', 'form-control');
+        $name->setOptions(array(
+            'empty_option' => sprintf('== %s ==', $translator->translate('Event name', static::TRANSLATOR_TEXT_DOMAIN)),
+        ));
+        $this->add($name);
+
 
         $size = new Element\Text('count');
         $size->setAttributes(array(
@@ -74,7 +111,22 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
                     array('name' => 'Int'),
                 ),
             ),
+            'objectId' => array(
+                'required' => false,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+            ),
+            'createdBy' => array(
+                'required' => false,
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+            ),
             'target' => array(
+                'required' => false,
+            ),
+            'name' => array(
                 'required' => false,
             ),
             'count' => array(
@@ -91,6 +143,31 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
                 ),
             ),
         );
+    }
+
+    /**
+     * Get entityManager
+     *
+     * @return EntityManager
+     */
+    public function getEntityManager()
+    {
+        if (! $this->entityManager instanceof EntityManager) {
+            $this->setEntityManager($this->getServiceManager()->get('doctrine.entitymanager.orm_default'));
+        }
+        return $this->entityManager;
+    }
+
+    /**
+     * Set entityManager
+     *
+     * @param  EntityManager $entityManager
+     * @return EventSearchForm
+     */
+    public function setEntityManager(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+        return $this;
     }
 
     /**

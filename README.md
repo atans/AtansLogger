@@ -104,7 +104,7 @@ class Module
     }
 ```
 
-4. Visit `http://pathtozf2/error`
+4. Visit `http://pathtozf2/log/error`
 
 ## Event log
 
@@ -133,11 +133,11 @@ CREATE TABLE IF NOT EXISTS `event_log` (
 
 ```php
 <?php
-namespace District\Logger\Callback;
+namespace District\EventLogger;
 
-use Logger\Callback\AbstractCallback;
+use Logger\EventLogger\AbstractEventLogger;
 
-class Group extends AbstractCallback
+class Group extends AbstractEventLogger
 {
     public function message(\District\Entity\Group $group)
     {
@@ -152,7 +152,7 @@ class Group extends AbstractCallback
     }
 
     // add_post event same as add.post
-    public function add_postCallback()
+    public function add_postEvent()
     {
         $loggerService = $this->getLoggerService();
         $self = $this;
@@ -172,15 +172,15 @@ class Group extends AbstractCallback
     }
 
     // edit event
-    public function edit_postCallback()
+    public function edit_postEvent()
     {
-        return $this->add_postCallback();
+        return $this->add_postEvent();
     }
 
     // delete event
-    public function deleteCallback()
+    public function deleteEvent()
     {
-        return $this->add_postCallback();
+        return $this->add_postEvent();
     }
 }
 ```
@@ -202,9 +202,10 @@ return array(
          */
         'events' => array(
             // District Module
-            'District\Service\Group'    => 'District\Logger\Callback\Group',
+            'District\Service\Group'    => 'District\EventLogger\Group',
         ),
     ),
 );
 ```
 
+5.Visit `http://pathtozf2/log/event`

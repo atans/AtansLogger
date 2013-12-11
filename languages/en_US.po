@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Atans User\n"
-"POT-Creation-Date: 2013-12-04 15:51+0800\n"
-"PO-Revision-Date: 2013-12-04 15:51+0800\n"
+"POT-Creation-Date: 2013-12-11 12:57+0800\n"
+"PO-Revision-Date: 2013-12-11 12:57+0800\n"
 "Last-Translator: atans <atans.chiu@gmail.com>\n"
 "Language-Team: atans <atans.chiu@gmail.com>\n"
 "Language: en_US\n"
@@ -19,6 +19,20 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
+#: ../src/AtansLogger/Form/EventSearchForm.php:54
+#: ../view/atans-logger/event/index.phtml:49
+msgid "Creator"
+msgstr ""
+
+#: ../src/AtansLogger/Form/EventSearchForm.php:74
+msgid "Target"
+msgstr ""
+
+#: ../src/AtansLogger/Form/EventSearchForm.php:82
+#: ../view/atans-logger/event/partial.phtml:15
+msgid "Event name"
+msgstr ""
+
 #: ../view/atans-logger/error/index.phtml:4
 msgid "Error log"
 msgstr ""
@@ -28,10 +42,12 @@ msgid "Error"
 msgstr ""
 
 #: ../view/atans-logger/error/index.phtml:54
+#: ../view/atans-logger/event/index.phtml:65
 msgid "Could not find any logs"
 msgstr ""
 
 #: ../view/atans-logger/error/partial.phtml:17
+#: ../view/atans-logger/event/partial.phtml:9
 msgid "Date"
 msgstr ""
 
@@ -44,9 +60,36 @@ msgid "Line"
 msgstr ""
 
 #: ../view/atans-logger/error/partial.phtml:20
+#: ../view/atans-logger/event/index.phtml:43
 msgid "Message"
 msgstr ""
 
 #: ../view/atans-logger/error/search-form.phtml:12
+#: ../view/atans-logger/event/search-form.phtml:12
 msgid "Count per page"
+msgstr ""
+
+#: ../view/atans-logger/event/index.phtml:4
+msgid "Event log"
+msgstr ""
+
+#: ../view/atans-logger/event/index.phtml:40
+msgid "Event"
+msgstr ""
+
+#: ../view/atans-logger/event/index.phtml:46
+msgid "Ip address"
+msgstr ""
+
+#: ../view/atans-logger/event/partial.phtml:12
+msgid "Event target"
+msgstr ""
+
+#: ../view/atans-logger/event/partial.phtml:19
+#: ../view/atans-logger/event/search-form.phtml:31
+msgid "Object id"
+msgstr ""
+
+#: ../view/atans-logger/event/partial.phtml:41
+msgid "None"
 msgstr ""

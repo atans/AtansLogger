@@ -20,15 +20,38 @@ return array(
     ),
     'router' => array(
         'routes' => array(
-            'error' => array(
+            'atanslogger' => array(
                 'type' => 'literal',
                 'options' => array(
-                    'route' => '/error',
+                    'route' => '/log',
                     'defaults' => array(
                         '__NAMESPACE__'  => 'AtansLogger\Controller',
-                        'controller'     => 'Error',
-                        'action'         => 'index'
-                     ),
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'error' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route' => '/error',
+                            'defaults' => array(
+                                '__NAMESPACE__'  => 'AtansLogger\Controller',
+                                'controller'     => 'Error',
+                                'action'         => 'index'
+                            ),
+                        ),
+                    ),
+                    'event' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route' => '/event',
+                            'defaults' => array(
+                                '__NAMESPACE__'  => 'AtansLogger\Controller',
+                                'controller'     => 'Event',
+                                'action'         => 'index'
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -46,6 +69,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'AtansLogger\Controller\Error' => 'AtansLogger\Controller\ErrorController',
+            'AtansLogger\Controller\Event' => 'AtansLogger\Controller\EventController',
         ),
     ),
     'view_manager' => array(

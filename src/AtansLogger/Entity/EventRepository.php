@@ -9,12 +9,39 @@ use Zend\Paginator\Paginator;
 
 class EventRepository extends EntityRepository
 {
-    public function pagination($data)
+    /**
+     * Paginator
+     *
+     * @param array $data
+     * @return Paginator
+     * @throws \District\Exception\InvalidArgumentException
+     */
+    public function pagination(array $data)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('e')
             ->from($this->getEntityName(), 'e');
+
+        if (isset($data['target']) && strlen($data['target']) > 0) {
+            $qb->andWhere($qb->expr()->eq('e.target', ':target'))
+               ->setParameter('target', $data['target']);
+        }
+
+        if (isset($data['name']) && strlen($data['name']) > 0) {
+            $qb->andWhere($qb->expr()->eq('e.name', ':name'))
+               ->setParameter('name', $data['name']);
+        }
+
+        if (isset($data['objectId']) && $data['objectId'] > 0) {
+            $qb->andWhere($qb->expr()->eq('e.objectId', ':objectId'))
+               ->setParameter('objectId', (int) $data['objectId']);
+        }
+
+        if (isset($data['createdBy']) && $data['createdBy'] > 0) {
+            $qb->andWhere($qb->expr()->eq('e.createdBy', ':createdBy'))
+               ->setParameter('createdBy', (int) $data['createdBy']);
+        }
 
         if (isset($data['query']) && strlen($queryString = trim($data['query']))) {
             $qb->andWhere($qb->expr()->orX(
@@ -43,5 +70,29 @@ class EventRepository extends EntityRepository
                   ->setItemCountPerPage($data['count']);
 
         return $paginator;
+    }
+
+    /**
+     * Get creators
+     *
+     * @return array
+     */
+    public function findCreators()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $result = $qb->select('IDENTITY(e.createdBy) AS createdBy, e.username')
+                     ->from($this->getEntityName(), 'e')
+                     ->where('e.createdBy > 0')
+                     ->groupBy('e.createdBy')
+                     ->getQuery()
+                     ->getArrayResult();
+
+        $creators = array();
+        foreach ($result as $creator) {
+            $creators[$creator['createdBy']] = sprintf('%s (#%d)', $creator['username'], $creator['createdBy']);
+        }
+
+        return $creators;
     }
 }

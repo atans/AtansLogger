@@ -2,13 +2,19 @@
 namespace AtansLogger\Service;
 
 use AtansLogger\Exception;
-use AtansLogger\Callback\AbstractCallback;
+use AtansLogger\EventLogger\AbstractEventLogger;
+use DoctrineORMModule\Options\EntityManager;
 use Zend\EventManager\SharedEventManagerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Event implements ServiceLocatorAwareInterface
 {
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
     /**
      * @var array
      */
@@ -36,8 +42,8 @@ class Event implements ServiceLocatorAwareInterface
             return $this;
         }
 
-        foreach ($classes as $class => $callbackClass) {
-            $this->addEvent($class, $callbackClass);
+        foreach ($classes as $class => $eventLoggerClass) {
+            $this->addEvent($class, $eventLoggerClass);
         }
 
         return $this;
@@ -47,12 +53,12 @@ class Event implements ServiceLocatorAwareInterface
      * Add event
      *
      * @param  string $id
-     * @param  string $eventCallbackClass
+     * @param  string $eventLoggerClass
      * @return Event
      * @throws Exception\InvalidArgumentException
      * @throws Exception\RuntimeException
      */
-    public function addEvent($id, $eventCallbackClass)
+    public function addEvent($id, $eventLoggerClass)
     {
         if (! class_exists($id)) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -62,42 +68,42 @@ class Event implements ServiceLocatorAwareInterface
             ));
         }
 
-        if (! class_exists($eventCallbackClass)) {
+        if (! class_exists($eventLoggerClass)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 "%s: callback class '%s' does not exist",
                 __METHOD__,
-                $eventCallbackClass
+                $eventLoggerClass
             ));
         }
 
-        $callbackClass = new $eventCallbackClass($this->getServiceLocator());
+        $eventClass = new $eventLoggerClass($this->getServiceLocator());
 
-        if (! $callbackClass instanceof AbstractCallback) {
+        if (! $eventClass instanceof AbstractEventLogger) {
             throw new Exception\InvalidArgumentException(sprintf(
-                "%s: callback class '%s' should instance of Log\Callback\AbstractCallback",
+                "%s:  Class '%s' should instance of AtansLogger\EventLogger\AbstractEventLogger",
                 __METHOD__,
-                $eventCallbackClass
+                $eventLoggerClass
             ));
         }
 
-        $this->events[$id] = $eventCallbackClass;
+        $this->events[$id] = $eventLoggerClass;
 
-        $events = $this->getEventNames($callbackClass);
+        $events = $this->getEventNames($eventLoggerClass);
         foreach ($events as $method => $event) {
-            if (! is_callable(array($callbackClass, $method))) {
+            if (! is_callable(array($eventClass, $method))) {
                 throw new Exception\RuntimeException(sprintf(
                     '%s::%s is not callable',
-                    $eventCallbackClass,
+                    $eventLoggerClass,
                     $method
                 ));
             }
 
-            $callback = $callbackClass->$method();
+            $callback = $eventClass->$method();
 
             if (!is_callable($callback)) {
                 throw new Exception\RuntimeException(sprintf(
                     '%s::%s should return callable variable',
-                    $eventCallbackClass,
+                    $eventLoggerClass,
                     $method
                 ));
             }
@@ -121,20 +127,47 @@ class Event implements ServiceLocatorAwareInterface
     /**
      * Get events from callback class
      *
-     * @param AbstractCallback $callback
+     * @param string $eventClass
      * @return array
      */
-    public  function getEventNames(AbstractCallback $callback)
+    public  function getEventNames($eventClass)
     {
-        $methods = get_class_methods($callback);
+        $class = new \ReflectionClass($eventClass);
+        $methods = $class->getMethods();
         $events = array();
         foreach ($methods as $method) {
-            if (strtolower(substr($method, -8)) == 'callback') {
-                $events[$method] = str_replace('_', '.', substr($method, 0, -8));
+            $methodName = $method->getName();
+            if (strtolower(substr($methodName, -5)) == 'event') {
+                $events[$methodName] = str_replace('_', '.', substr($methodName, 0, -5));
             }
         }
 
         return $events;
+    }
+
+    /**
+     * Get entityManager
+     *
+     * @return EntityManager
+     */
+    public function getEntityManager()
+    {
+        if (! $this->entityManager instanceof EntityManager) {
+            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        }
+        return $this->entityManager;
+    }
+
+    /**
+     * Set entityManager
+     *
+     * @param  EntityManager $entityManager
+     * @return Event
+     */
+    public function setEntityManager(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+        return $this;
     }
 
     /**
