@@ -1,0 +1,45 @@
+<?php
+namespace AtansLogger;
+?>
+
+<?php if (!$isXmlHttpRequest || ($isXmlHttpRequest && $paginator->getCurrentPageNumber() < 2)): ?>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th class="col-lg-1 col-md-1 col-sm-1">#</th>
+        <th class="col-lg-3 col-md-3 col-sm-3">
+            <?php echo $this->translate('Event', __NAMESPACE__) ?>
+        </th>
+        <th class="col-lg-4 col-md-4 col-sm-4">
+            <?php echo $this->translate('Message', __NAMESPACE__) ?>
+        </th>
+        <th class="col-lg-2 col-md-2 col-sm-2">
+            <?php echo $this->translate('Ip address', __NAMESPACE__) ?>
+        </th>
+        <th class="col-lg-3 col-md-3 col-sm-3">
+            <?php echo $this->translate('Creator', __NAMESPACE__) ?>
+        </th>
+    </tr>
+    </thead>
+<?php endif ?>
+
+    <?php if (count($paginator) > 0) : ?>
+        <?php
+        foreach ($paginator as $event){
+            echo $this->render('atans-logger/event/partial', array('event' => $event));
+        }
+        ?>
+    <?php else: ?>
+
+        <?php if ($isXmlHttpRequest): ?>
+        <tr>
+            <td colspan="5" class="text-center">
+                <?php echo $this->translate('Could not find any logs', __NAMESPACE__) ?>
+            </td>
+        </tr>
+        <?php endif ?>
+    <?php endif ?>
+
+<?php if (!$isXmlHttpRequest || ($isXmlHttpRequest && $paginator->getCurrentPageNumber() < 2)): ?>
+</table>
+<?php endif ?>

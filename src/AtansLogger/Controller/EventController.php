@@ -6,6 +6,7 @@ use AtansLogger\Service\Event as EventService;
 use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 class EventController extends AbstractActionController
 {
@@ -71,9 +72,29 @@ class EventController extends AbstractActionController
 
         $paginator = $eventRepository->pagination($form->getData());
 
+
+        if ($request->isXmlHttpRequest()) {
+            $viewModel = new ViewModel(array(
+                'isXmlHttpRequest' => true,
+                'paginator'        => $paginator,
+            ));
+            $viewModel->setTemplate('atans-logger/event/table')
+                      ->setTerminal(true);
+
+            $viewRenderer = $this->getServiceLocator()->get('ViewRenderer');
+
+            $table = $viewRenderer->render($viewModel);
+
+            return $this->ajax()->success(true, array(
+                'table'     => $table,
+                'pageCount' => $paginator->count(),
+            ));
+        }
+
         return array(
-            'form'      => $form,
-            'paginator' => $paginator,
+            'isXmlHttpRequest' => false,
+            'form'             => $form,
+            'paginator'        => $paginator,
         );
     }
 
