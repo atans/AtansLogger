@@ -2,7 +2,7 @@
 namespace AtansLogger;
 ?>
 
-<?php if (!$isXmlHttpRequest || ($isXmlHttpRequest && $paginator->getCurrentPageNumber() < 2)): ?>
+<?php if (! $isXmlHttpRequest || ($isXmlHttpRequest && $paginator->getCurrentPageNumber() < 2)): ?>
 <table class="table table-striped">
     <thead>
     <tr>
@@ -24,7 +24,6 @@ namespace AtansLogger;
         }
         ?>
     <?php else: ?>
-
         <?php if ($isXmlHttpRequest): ?>
         <tr>
             <td colspan="3" class="text-center">
@@ -34,6 +33,6 @@ namespace AtansLogger;
         <?php endif ?>
     <?php endif ?>
 
-<?php if (!$isXmlHttpRequest || ($isXmlHttpRequest && $paginator->getCurrentPageNumber() < 2)): ?>
+<?php if (! $isXmlHttpRequest || ($isXmlHttpRequest && $paginator->getCurrentPageNumber() < 2)): ?>
 </table>
 <?php endif ?>
