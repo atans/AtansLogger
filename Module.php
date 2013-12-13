@@ -1,6 +1,7 @@
 <?php
 namespace AtansLogger;
 
+use Zend\Log\Logger;
 use Zend\Mvc\MvcEvent;
 
 class Module
@@ -52,14 +53,14 @@ class Module
                 },
                 'zend_log_logger_priorities' => function ($sm) {
                     return array(
-                        \Zend\Log\Logger::EMERG  => 'EMERG',
-                        \Zend\Log\Logger::ALERT  => 'ALERT',
-                        \Zend\Log\Logger::CRIT   => 'CRIT',
-                        \Zend\Log\Logger::ERR    => 'ERR',
-                        \Zend\Log\Logger::WARN   => 'WARN',
-                        \Zend\Log\Logger::NOTICE => 'NOTICE',
-                        \Zend\Log\Logger::INFO   => 'INFO',
-                        \Zend\Log\Logger::DEBUG  => 'DEBUG',
+                        Logger::EMERG  => 'EMERG',
+                        Logger::ALERT  => 'ALERT',
+                        Logger::CRIT   => 'CRIT',
+                        Logger::ERR    => 'ERR',
+                        Logger::WARN   => 'WARN',
+                        Logger::NOTICE => 'NOTICE',
+                        Logger::INFO   => 'INFO',
+                        Logger::DEBUG  => 'DEBUG',
                     );
                 },
             ),
