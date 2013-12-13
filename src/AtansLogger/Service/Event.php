@@ -4,12 +4,15 @@ namespace AtansLogger\Service;
 use AtansLogger\Exception;
 use AtansLogger\EventLogger\AbstractEventLogger;
 use DoctrineORMModule\Options\EntityManager;
+use ReflectionClass;
 use Zend\EventManager\SharedEventManagerInterface;
+use Zend\Filter\Word\CamelCaseToSeparator;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Event implements ServiceLocatorAwareInterface
 {
+    const EVENT_SUFFIX = 'event';
     /**
      * @var EntityManager
      */
@@ -132,13 +135,15 @@ class Event implements ServiceLocatorAwareInterface
      */
     public  function getEventNames($eventClass)
     {
-        $class = new \ReflectionClass($eventClass);
+        $class = new ReflectionClass($eventClass);
         $methods = $class->getMethods();
         $events = array();
+        $filter = new CamelCaseToSeparator('.');
+        $suffixLength = strlen(static::EVENT_SUFFIX);
         foreach ($methods as $method) {
             $methodName = $method->getName();
-            if (strtolower(substr($methodName, -5)) == 'event') {
-                $events[$methodName] = str_replace('_', '.', substr($methodName, 0, -5));
+            if (strtolower(substr($methodName, -$suffixLength)) == static::EVENT_SUFFIX) {
+                $events[$methodName] = strtolower($filter(substr($methodName, 0, -$suffixLength)));
             }
         }
 

@@ -151,8 +151,8 @@ class Group extends AbstractEventLogger
         ));
     }
 
-    // add_post event same as add.post
-    public function add_postEvent()
+    // addPostEvent event same is add.post
+    public function addPostEvent()
     {
         $loggerService = $this->getLoggerService();
         $self = $this;
@@ -172,15 +172,15 @@ class Group extends AbstractEventLogger
     }
 
     // edit event
-    public function edit_postEvent()
+    public function editPostEvent()
     {
-        return $this->add_postEvent();
+        return $this->addPostEvent();
     }
 
     // delete event
     public function deleteEvent()
     {
-        return $this->add_postEvent();
+        return $this->addPostEvent();
     }
 }
 ```
