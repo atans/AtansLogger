@@ -15,7 +15,9 @@ namespace AtansLogger;
             <?php if ($username = $event->getUsername()): ?>
                 <?php echo $this->escapeHtml($username) ?>
             <?php else: ?>
-                <?php echo $this->translate('None', __NAMESPACE__) ?>
+                <span class="text-danger">
+                    <?php echo $this->translate('No record found', __NAMESPACE__) ?>
+                </span>
             <?php endif ?>
         <?php endif ?>
         <br>
