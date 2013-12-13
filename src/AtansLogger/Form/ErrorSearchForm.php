@@ -2,6 +2,7 @@
 namespace AtansLogger\Form;
 
 use Zend\Form\Element;
+use Zend\I18n\Translator\Translator;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
@@ -15,6 +16,16 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
      */
     protected $serviceManager;
 
+    /**
+     * @var Translator
+     */
+    protected $translator;
+
+    /**
+     * Initialization
+     *
+     * @param ServiceManager $serviceManager
+     */
     public function __construct(ServiceManager $serviceManager)
     {
         parent::__construct('error-search-form');
@@ -23,7 +34,6 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $this->setAttribute('role', 'form');
 
         $this->setServiceManager($serviceManager);
-        $translator = $this->getServiceManager()->get('Translator');
 
         $page = new Element\Hidden('page');
         $this->add($page);
@@ -31,7 +41,7 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $priority = new Element\Select('priority');
         $priority->setAttribute('class', 'form-control');
         $priority->setOptions(array(
-            'empty_option' => sprintf('== %s ==', $translator->translate('Priority', static::TRANSLATOR_TEXT_DOMAIN)),
+            'empty_option' => sprintf('== %s ==', $this->getTranslator()->translate('Priority', static::TRANSLATOR_TEXT_DOMAIN)),
             'value_options' => $this->getServiceManager()->get('zend_log_logger_priorities'),
         ));
         $this->add($priority);
@@ -46,6 +56,8 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $query = new Element\Text('query');
         $query->setAttribute('class', 'form-control');
         $this->add($query);
+
+        $this->getEventManager()->trigger('init', $this);
     }
 
     /**
@@ -101,6 +113,31 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     public function setServiceManager(ServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
+        return $this;
+    }
+
+    /**
+     * Get translator
+     *
+     * @return Translator
+     */
+    public function getTranslator()
+    {
+        if (! $this->translator instanceof Translator) {
+            $this->setTranslator($this->getServiceManager()->get('Translator'));
+        }
+        return $this->translator;
+    }
+
+    /**
+     * Set translator
+     *
+     * @param  Translator $translator
+     * @return ErrorSearchForm
+     */
+    public function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
         return $this;
     }
 }

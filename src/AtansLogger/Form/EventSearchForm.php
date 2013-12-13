@@ -4,6 +4,7 @@ namespace AtansLogger\Form;
 use AtansLogger\Service\Event as EventService;
 use Doctrine\ORM\EntityManager;
 use Zend\Form\Element;
+use Zend\I18n\Translator\Translator;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
@@ -25,14 +26,19 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     protected $entityManager;
 
     /**
+     * @var EventService
+     */
+    protected $eventService;
+
+    /**
      * @var ServiceManager
      */
     protected $serviceManager;
 
     /**
-     * @var EventService
+     * @var Translator
      */
-    protected $eventService;
+    protected $translator;
 
     public function __construct(ServiceManager $serviceManager)
     {
@@ -42,7 +48,7 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $this->setAttribute('role', 'form');
 
         $this->setServiceManager($serviceManager);
-        $translator   = $this->getServiceManager()->get('Translator');
+        $translator   = $this->getTranslator();
 
         $page = new Element\Hidden('page');
         $this->add($page);
@@ -171,28 +177,6 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     }
 
     /**
-     * Get serviceManager
-     *
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
-
-    /**
-     * Set serviceManager
-     *
-     * @param  ServiceManager $serviceManager
-     * @return ErrorSearchForm
-     */
-    public function setServiceManager(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-        return $this;
-    }
-
-    /**
      * Get eventService
      *
      * @return EventService
@@ -216,4 +200,52 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $this->eventService = $eventService;
         return $this;
     }
+
+    /**
+     * Get serviceManager
+     *
+     * @return ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return $this->serviceManager;
+    }
+
+    /**
+     * Set serviceManager
+     *
+     * @param  ServiceManager $serviceManager
+     * @return ErrorSearchForm
+     */
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+        return $this;
+    }
+
+    /**
+     * Get translator
+     *
+     * @return Translator
+     */
+    public function getTranslator()
+    {
+        if (! $this->translator instanceof Translator) {
+            $this->setTranslator($this->getServiceManager()->get('Translator'));
+        }
+        return $this->translator;
+    }
+
+    /**
+     * Set translator
+     *
+     * @param  Translator $translator
+     * @return EventSearchForm
+     */
+    public function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
+        return $this;
+    }
+
 }
