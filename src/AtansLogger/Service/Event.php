@@ -12,7 +12,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Event implements ServiceLocatorAwareInterface
 {
+    /**
+     * Event name suffix
+     */
     const EVENT_SUFFIX = 'event';
+
     /**
      * @var EntityManager
      */
