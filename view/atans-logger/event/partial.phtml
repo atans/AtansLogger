@@ -6,6 +6,22 @@ namespace AtansLogger;
         <?php echo $this->escapeHtml($event->getId()) ?>
     </td>
     <td>
+        <?php echo $this->translate('Creator', __NAMESPACE__) ?>:
+        <?php if ($createdBy = $event->getCreatedBy()): ?>
+            <a href="<?php echo $this->url('atanslogger/event', array(), array('query' => array('target' => $event->getTarget(), 'createdBy' => $createdBy->getId())))?>">
+                <?php echo $this->escapeHtml($createdBy->getUsername()) ?>
+            </a>
+        <?php else: ?>
+            <?php if ($username = $event->getUsername()): ?>
+                <?php echo $this->escapeHtml($username) ?>
+            <?php else: ?>
+                <?php echo $this->translate('None', __NAMESPACE__) ?>
+            <?php endif ?>
+        <?php endif ?>
+        <br>
+        <?php echo $this->translate('Ip address', __NAMESPACE__) ?>:
+        <?php echo $this->escapeHtml($event->getIpAddress()) ?>
+        <br>
         <?php echo $this->translate('Date', __NAMESPACE__) ?>:
         <?php echo $this->escapeHtml($event->getCreated()->format('Y/m/d H:i:s')) ?>
         <br>
@@ -24,23 +40,5 @@ namespace AtansLogger;
     </td>
     <td>
         <?php echo nl2br($this->escapeHtml($event->getMessage())) ?>
-    </td>
-    <td>
-        <?php echo $this->escapeHtml($event->getIpAddress()) ?>
-    </td>
-    <td>
-        <?php if ($createdBy = $event->getCreatedBy()): ?>
-            <a href="<?php echo $this->url('atanslogger/event', array(), array('query' => array('target' => $event->getTarget(), 'createdBy' => $createdBy->getId())))?>">
-                <?php echo $this->escapeHtml($createdBy->getUsername()) ?>
-            </a>
-        <?php else: ?>
-            <?php if ($username = $event->getUsername()): ?>
-                <?php echo $this->escapeHtml($username) ?>
-            <?php else: ?>
-                <label class="label label-warning">
-                    <?php echo $this->translate('None', __NAMESPACE__) ?>
-                </label>
-            <?php endif ?>
-        <?php endif ?>
     </td>
 </tr>
