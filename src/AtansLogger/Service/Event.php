@@ -139,11 +139,12 @@ class Event implements ServiceLocatorAwareInterface
      */
     public  function getEventNames($eventClass)
     {
-        $class = new ReflectionClass($eventClass);
-        $methods = $class->getMethods();
-        $events = array();
-        $filter = new CamelCaseToSeparator('.');
+        $class        = new ReflectionClass($eventClass);
+        $methods      = $class->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $filter       = new CamelCaseToSeparator('.');
         $suffixLength = strlen(static::EVENT_SUFFIX);
+
+        $events = array();
         foreach ($methods as $method) {
             $methodName = $method->getName();
             if (strtolower(substr($methodName, -$suffixLength)) == static::EVENT_SUFFIX) {
