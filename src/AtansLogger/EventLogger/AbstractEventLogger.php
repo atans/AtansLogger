@@ -2,18 +2,12 @@
 namespace AtansLogger\EventLogger;
 
 use Doctrine\ORM\EntityManager;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use AtansLogger\Service\Logger as LoggerService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 abstract class AbstractEventLogger implements ServiceLocatorAwareInterface
 {
-    /**
-     * @var DoctrineHydrator
-     */
-    protected $doctrineHydrator;
-
     /**
      * @var EntityManager
      */
@@ -29,34 +23,14 @@ abstract class AbstractEventLogger implements ServiceLocatorAwareInterface
      */
     protected $serviceLocator;
 
+    /**
+     * Initialization
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     */
     public function __construct(ServiceLocatorInterface $serviceLocator)
     {
         $this->setServiceLocator($serviceLocator);
-    }
-
-    /**
-     * Get doctrineHydrator
-     *
-     * @return DoctrineHydrator
-     */
-    public function getDoctrineHydrator()
-    {
-        if (! $this->doctrineHydrator instanceof DoctrineHydrator) {
-            $this->setDoctrineHydrator(new DoctrineHydrator($this->getEntityManager()));
-        }
-        return $this->doctrineHydrator;
-    }
-
-    /**
-     * Set doctrineHydrator
-     *
-     * @param  DoctrineHydrator $doctrineHydrator
-     * @return AbstractCallback
-     */
-    public function setDoctrineHydrator(DoctrineHydrator $doctrineHydrator)
-    {
-        $this->doctrineHydrator = $doctrineHydrator;
-        return $this;
     }
 
     /**
@@ -76,7 +50,7 @@ abstract class AbstractEventLogger implements ServiceLocatorAwareInterface
      * Set entityManager
      *
      * @param  EntityManager $entityManager
-     * @return AbstractCallback
+     * @return AbstractEventLogger
      */
     public function setEntityManager(EntityManager $entityManager)
     {
@@ -101,7 +75,7 @@ abstract class AbstractEventLogger implements ServiceLocatorAwareInterface
      * Set loggerService
      *
      * @param  LoggerService $loggerService
-     * @return AbstractCallback
+     * @return AbstractEventLogger
      */
     public function setLoggerService(LoggerService $loggerService)
     {
