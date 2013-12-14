@@ -11,6 +11,9 @@ use ZfcBase\Form\ProvidesEventsForm;
 
 class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
+    /**
+     * Translator text domain
+     */
     const TRANSLATOR_TEXT_DOMAIN = 'AtansLogger';
 
     /**
@@ -40,6 +43,11 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
      */
     protected $translator;
 
+    /**
+     * Initialization
+     *
+     * @param ServiceManager $serviceManager
+     */
     public function __construct(ServiceManager $serviceManager)
     {
         parent::__construct('event-search-form');
@@ -58,7 +66,7 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
             'class' => 'form-control',
         ))->setOptions(array(
             'empty_option' => sprintf('== %s ==', $translator->translate('Creator', static::TRANSLATOR_TEXT_DOMAIN)),
-            'value_options' => $this->getEntityManager()->getRepository($this->entities['Event'])->findCreators()
+            'value_options' => $this->getEntityManager()->getRepository($this->entities['Event'])->findCreators(),
         ));
         $this->add($createdBy);
 
@@ -100,6 +108,8 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $query = new Element\Text('query');
         $query->setAttribute('class', 'form-control');
         $this->add($query);
+
+        $this->getEventManager()->trigger('init', $this);
     }
 
     /**
@@ -247,5 +257,4 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $this->translator = $translator;
         return $this;
     }
-
 }
