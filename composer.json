@@ -22,7 +22,8 @@
         "doctrine/doctrine-orm-module": "0.8.*@dev",
         "zf-commons/zfc-base": "0.1.*",
         "atans/atans-common": "0.1.3",
-        "atans/atans-user": "dev-master"
+        "atans/atans-user": "dev-master",
+        "rashid2538/php-htmldiff": "dev-master"
     },
     "autoload": {
         "psr-0": {
