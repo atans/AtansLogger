@@ -10,6 +10,34 @@ use Zend\Paginator\Paginator;
 class EventRepository extends EntityRepository
 {
     /**
+     * Get previous event
+     *
+     * @param  string $target
+     * @param  int $objectId
+     * @param  int $id
+     * @return Event
+     */
+    public function getPreviousEvent($target, $objectId, $id)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $event = $qb->select('e')
+                  ->from($this->getClassName(), 'e')
+                  ->where($qb->expr()->eq('e.target', ':target'))
+                  ->setParameter('target', $target)
+                  ->andWhere($qb->expr()->eq('e.objectId', ':objectId'))
+                  ->setParameter('objectId', $objectId)
+                  ->andWhere($qb->expr()->lt('e.id', ':id'))
+                  ->setParameter('id', $id)
+                  ->orderBy('e.id', 'DESC')
+                  ->setMaxResults(1)
+                  ->getQuery()
+                  ->getOneOrNullResult();
+
+        return $event;
+    }
+
+    /**
      * Paginator
      *
      * @param array $data

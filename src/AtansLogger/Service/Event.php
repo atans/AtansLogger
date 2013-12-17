@@ -3,6 +3,7 @@ namespace AtansLogger\Service;
 
 use AtansLogger\Exception;
 use AtansLogger\EventLogger\AbstractEventLogger;
+use AtansLogger\Options\ModuleOptions;
 use DoctrineORMModule\Options\EntityManager;
 use ReflectionClass;
 use Zend\EventManager\SharedEventManagerInterface;
@@ -18,14 +19,19 @@ class Event implements ServiceLocatorAwareInterface
     const EVENT_SUFFIX = 'event';
 
     /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
      * @var array
      */
     protected $events;
+
+    /**
+     * @var EntityManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var ModuleOptions
+     */
+    protected $options;
 
     /**
      * @var SharedEventManagerInterface
@@ -160,12 +166,13 @@ class Event implements ServiceLocatorAwareInterface
      *
      * @return EntityManager
      */
-    public function getEntityManager()
+    public function getObjectManager()
     {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        if (! $this->objectManager instanceof EntityManager) {
+            $objectManager = $this->getServiceLocator()->get($this->getOptions()->getObjectManager());
+            $this->setObjectManager($objectManager);
         }
-        return $this->entityManager;
+        return $this->objectManager;
     }
 
     /**
@@ -174,9 +181,34 @@ class Event implements ServiceLocatorAwareInterface
      * @param  EntityManager $entityManager
      * @return Event
      */
-    public function setEntityManager(EntityManager $entityManager)
+    public function setObjectManager(EntityManager $entityManager)
     {
-        $this->entityManager = $entityManager;
+        $this->objectManager = $entityManager;
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return ModuleOptions
+     */
+    public function getOptions()
+    {
+        if (! $this->options instanceof ModuleOptions) {
+            $this->setOptions($this->getServiceLocator()->get('atanslogger_module_options'));
+        }
+        return $this->options;
+    }
+
+    /**
+     * Set options
+     *
+     * @param  ModuleOptions $options
+     * @return Event
+     */
+    public function setOptions(ModuleOptions $options)
+    {
+        $this->options = $options;
         return $this;
     }
 

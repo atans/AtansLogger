@@ -1,18 +1,12 @@
 <?php
 namespace AtansLogger\Controller;
 
-use AtansLogger\Options\ErrorInterface;
-use Doctrine\ORM\EntityManager;
+use AtansLogger\Options\ModuleOptions;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class ErrorController extends AbstractActionController
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
     /**
      * @var array
      */
@@ -26,13 +20,13 @@ class ErrorController extends AbstractActionController
     protected $errorSearchForm;
 
     /**
-     * @var ErrorInterface
+     * @var ModuleOptions
      */
     protected $options;
 
     public function indexAction()
     {
-        $entityManager = $this->getEntityManager();
+        $objectManager = $this->objectManager($this->getOptions()->getObjectManager());
         $request       = $this->getRequest();
 
         $data = array(
@@ -46,7 +40,7 @@ class ErrorController extends AbstractActionController
         $form->setData($data);
         $form->isValid();
 
-        $paginator = $entityManager->getRepository($this->entities['Error'])->pagination($form->getData());
+        $paginator = $objectManager->getRepository($this->entities['Error'])->pagination($form->getData());
 
         return array(
             'form'             => $form,
@@ -56,39 +50,13 @@ class ErrorController extends AbstractActionController
     }
 
     /**
-     * Set entityManager
-     *
-     * @param  EntityManager $entityManager
-     * @return ErrorController
-     */
-    public function setEntityManager(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-
-        return $this;
-    }
-
-    /**
-     * Get entityManager
-     *
-     * @return EntityManager
-     */
-    public function getEntityManager()
-    {
-        if (!$this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        }
-        return $this->entityManager;
-    }
-
-    /**
      * Get errorSearchForm
      *
      * @returnForm
      */
     public function getErrorSearchForm()
     {
-        if (!$this->errorSearchForm instanceof Form) {
+        if (! $this->errorSearchForm instanceof Form) {
             $this->setErrorSearchForm($this->getServiceLocator()->get('atanslogger_error_search_form'));
         }
         return $this->errorSearchForm;
@@ -109,11 +77,11 @@ class ErrorController extends AbstractActionController
     /**
      * Get options
      *
-     * @return ErrorInterface
+     * @return ModuleOptions
      */
     public function getOptions()
     {
-        if (! $this->options instanceof ErrorInterface) {
+        if (! $this->options instanceof ModuleOptions) {
             $this->setOptions($this->getServiceLocator()->get('atanslogger_module_options'));
         }
         return $this->options;
@@ -122,10 +90,10 @@ class ErrorController extends AbstractActionController
     /**
      * Set options
      *
-     * @param  ErrorInterface $options
+     * @param  ModuleOptions $options
      * @return ErrorController
      */
-    public function setOptions(ErrorInterface $options)
+    public function setOptions(ModuleOptions $options)
     {
         $this->options = $options;
         return $this;

@@ -1,20 +1,14 @@
 <?php
 namespace AtansLogger\Controller;
 
-use AtansLogger\Options\EventInterface;
+use AtansLogger\Options\ModuleOptions;
 use AtansLogger\Service\Event as EventService;
-use Doctrine\ORM\EntityManager;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 class EventController extends AbstractActionController
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
     /**
      * @var array
      */
@@ -33,16 +27,16 @@ class EventController extends AbstractActionController
     protected $eventService;
 
     /**
-     * @var EventInterface
+     * @var ModuleOptions
      */
     protected $options;
 
     public function indexAction()
     {
-        $entityManager = $this->getEntityManager();
+        $objectManager = $this->objectManager($this->getOptions()->getObjectManager());
         $request       = $this->getRequest();
 
-        $eventRepository = $entityManager->getRepository($this->entities['Event']);
+        $eventRepository = $objectManager->getRepository($this->entities['Event']);
 
         $data = array(
             'target'    => $request->getQuery('target', ''),
@@ -99,31 +93,6 @@ class EventController extends AbstractActionController
     }
 
     /**
-     * Get entityManager
-     *
-     * @return EntityManager
-     */
-    public function getEntityManager()
-    {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
-        }
-        return $this->entityManager;
-    }
-
-    /**
-     * Set entityManager
-     *
-     * @param  EntityManager $entityManager
-     * @return EventController
-     */
-    public function setEntityManager(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-        return $this;
-    }
-
-    /**
      * Get eventSearchForm
      *
      * @return Form
@@ -176,11 +145,11 @@ class EventController extends AbstractActionController
     /**
      * Get options
      *
-     * @return EventInterface
+     * @return ModuleOptions
      */
     public function getOptions()
     {
-        if (! $this->options instanceof EventInterface) {
+        if (! $this->options instanceof ModuleOptions) {
             $this->setOptions($this->getServiceLocator()->get('atanslogger_module_options'));
         }
         return $this->options;
@@ -189,10 +158,10 @@ class EventController extends AbstractActionController
     /**
      * Set options
      *
-     * @param  EventInterface $options
+     * @param  ModuleOptions $options
      * @return EventController
      */
-    public function setOptions(EventInterface $options)
+    public function setOptions(ModuleOptions $options)
     {
         $this->options = $options;
         return $this;

@@ -72,6 +72,11 @@ return array(
             'AtansLogger\Controller\Event' => 'AtansLogger\Controller\EventController',
         ),
     ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'previousEvent' => 'AtansLogger\View\Helper\PreviousEvent',
+        ),
+    ),
     'view_manager' => array(
         'template_path_stack' => array(
             __DIR__ . '/../view',

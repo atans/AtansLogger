@@ -21,9 +21,9 @@
         "doctrine/doctrine-module": "0.8.x-dev",
         "doctrine/doctrine-orm-module": "0.8.*@dev",
         "zf-commons/zfc-base": "0.1.*",
-        "atans/atans-common": "0.1.*",
+        "atans/atans-common": "0.1.3",
         "atans/atans-user": "dev-master",
-        "phpspec/php-diff": "1.0.*"
+        "yetanotherape/diff-match-patch": "dev-master"
     },
     "autoload": {
         "psr-0": {

@@ -1,5 +1,15 @@
 <?php
 namespace AtansLogger;
+
+
+$previousEvent = null;
+$diff          = null;
+if ($event->getObjectId() > 0) {
+    $previousEvent = $this->previousEvent($event->getTarget(), $event->getObjectId(), $event->getId());
+}
+
+if ($previousEvent) {
+}
 ?>
 <tr>
     <td>
@@ -41,6 +51,8 @@ namespace AtansLogger;
         <?php endif ?>
     </td>
     <td>
+        <?php if ($diff): ?>
+        <?php endif ?>
         <?php echo nl2br($this->escapeHtml($event->getMessage())) ?>
     </td>
 </tr>

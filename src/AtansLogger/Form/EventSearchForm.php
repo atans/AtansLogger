@@ -1,6 +1,7 @@
 <?php
 namespace AtansLogger\Form;
 
+use AtansLogger\Options\ModuleOptions;
 use AtansLogger\Service\Event as EventService;
 use Doctrine\ORM\EntityManager;
 use Zend\Form\Element;
@@ -24,14 +25,19 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     );
 
     /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
      * @var EventService
      */
     protected $eventService;
+
+    /**
+     * @var ModuleOptions
+     */
+    protected $moduleOptions;
+
+    /**
+     * @var EntityManager
+     */
+    protected $objectManager;
 
     /**
      * @var ServiceManager
@@ -66,7 +72,7 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
             'class' => 'form-control',
         ))->setOptions(array(
             'empty_option' => sprintf('== %s ==', $translator->translate('Creator', static::TRANSLATOR_TEXT_DOMAIN)),
-            'value_options' => $this->getEntityManager()->getRepository($this->entities['Event'])->findCreators(),
+            'value_options' => $this->getObjectManager()->getRepository($this->entities['Event'])->findCreators(),
         ));
         $this->add($createdBy);
 
@@ -162,31 +168,6 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     }
 
     /**
-     * Get entityManager
-     *
-     * @return EntityManager
-     */
-    public function getEntityManager()
-    {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceManager()->get('doctrine.entitymanager.orm_default'));
-        }
-        return $this->entityManager;
-    }
-
-    /**
-     * Set entityManager
-     *
-     * @param  EntityManager $entityManager
-     * @return EventSearchForm
-     */
-    public function setEntityManager(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-        return $this;
-    }
-
-    /**
      * Get eventService
      *
      * @return EventService
@@ -208,6 +189,58 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     public function setEventService($eventService)
     {
         $this->eventService = $eventService;
+        return $this;
+    }
+
+    /**
+     * Get moduleOptions
+     *
+     * @return ModuleOptions
+     */
+    public function getModuleOptions()
+    {
+        if (! $this->moduleOptions instanceof ModuleOptions) {
+            $this->setModuleOptions($this->getServiceManager()->get('atanslogger_module_options'));
+        }
+        return $this->moduleOptions;
+    }
+
+    /**
+     * Set moduleOptions
+     *
+     * @param  ModuleOptions $moduleOptions
+     * @return EventSearchForm
+     */
+    public function setModuleOptions(ModuleOptions $moduleOptions)
+    {
+        $this->moduleOptions = $moduleOptions;
+        return $this;
+    }
+
+
+    /**
+     * Get entityManager
+     *
+     * @return EntityManager
+     */
+    public function getObjectManager()
+    {
+        if (! $this->objectManager instanceof EntityManager) {
+            $objectManager = $this->getServiceManager()->get($this->getModuleOptions()->getObjectManager());
+            $this->setObjectManager($objectManager);
+        }
+        return $this->objectManager;
+    }
+
+    /**
+     * Set entityManager
+     *
+     * @param  EntityManager $entityManager
+     * @return EventSearchForm
+     */
+    public function setObjectManager(EntityManager $entityManager)
+    {
+        $this->objectManager = $entityManager;
         return $this;
     }
 
