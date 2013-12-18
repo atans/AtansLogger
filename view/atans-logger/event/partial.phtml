@@ -1,14 +1,11 @@
 <?php
 namespace AtansLogger;
 
+use Wally\Diff;
 
 $previousEvent = null;
-$diff          = null;
 if ($event->getObjectId() > 0) {
     $previousEvent = $this->previousEvent($event->getTarget(), $event->getObjectId(), $event->getId());
-}
-
-if ($previousEvent) {
 }
 ?>
 <tr>
@@ -51,8 +48,11 @@ if ($previousEvent) {
         <?php endif ?>
     </td>
     <td>
-        <?php if ($diff): ?>
+        <?php if ($previousEvent): ?>
+            <?php $diff = new Diff(); ?>
+            <?php echo nl2br($diff->getDiff($previousEvent->getMessage(), $event->getMessage())) ?>
+        <?php else: ?>
+            <?php echo nl2br($this->escapeHtml($event->getMessage())) ?>
         <?php endif ?>
-        <?php echo nl2br($this->escapeHtml($event->getMessage())) ?>
     </td>
 </tr>
