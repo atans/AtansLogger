@@ -4,7 +4,7 @@ namespace AtansLogger\Options;
 use Zend\Stdlib\AbstractOptions;
 
 class ModuleOptions extends AbstractOptions implements
-    AtansUserInterface,
+    AtansLoggerInterface,
     ErrorInterface,
     EventInterface
 {
@@ -12,6 +12,11 @@ class ModuleOptions extends AbstractOptions implements
      * Turn off strict options mode
      */
     protected $__strictMode__ = false;
+
+    /**
+     * @var string
+     */
+    protected $authenticationService = 'Zend\Authentication\AuthenticationService';
 
     /**
      * @var string
@@ -37,6 +42,28 @@ class ModuleOptions extends AbstractOptions implements
      * @var array
      */
     protected $events = array();
+
+    /**
+     * Set authenticationService
+     *
+     * @param  string $authenticationService
+     * @return ModuleOptions
+     */
+    public function setAuthenticationService($authenticationService)
+    {
+        $this->authenticationService = $authenticationService;
+        return $this;
+    }
+
+    /**
+     * Get authenticationService
+     *
+     * @return string
+     */
+    public function getAuthenticationService()
+    {
+        return $this->authenticationService;
+    }
 
     /**
      * Set objectManager
