@@ -235,12 +235,12 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     /**
      * Set entityManager
      *
-     * @param  EntityManager $entityManager
+     * @param  EntityManager $objectManager
      * @return EventSearchForm
      */
-    public function setObjectManager(EntityManager $entityManager)
+    public function setObjectManager(EntityManager $objectManager)
     {
-        $this->objectManager = $entityManager;
+        $this->objectManager = $objectManager;
         return $this;
     }
 

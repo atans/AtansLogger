@@ -9,6 +9,9 @@ use ZfcBase\Form\ProvidesEventsForm;
 
 class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
+    /**
+     * Translator text domain
+     */
     const TRANSLATOR_TEXT_DOMAIN = 'AtansLogger';
 
     /**

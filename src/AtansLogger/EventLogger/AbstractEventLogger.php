@@ -1,6 +1,7 @@
 <?php
 namespace AtansLogger\EventLogger;
 
+use AtansLogger\Options\ModuleOptions;
 use Doctrine\ORM\EntityManager;
 use AtansLogger\Service\Logger as LoggerService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -11,7 +12,12 @@ abstract class AbstractEventLogger implements ServiceLocatorAwareInterface
     /**
      * @var EntityManager
      */
-    protected $entityManager;
+    protected $objectManager;
+
+    /**
+     * @var ModuleOptions
+     */
+    protected $options;
 
     /**
      * @var LoggerService
@@ -38,23 +44,48 @@ abstract class AbstractEventLogger implements ServiceLocatorAwareInterface
      *
      * @return EntityManager
      */
-    public function getEntityManager()
+    public function getObjectManager()
     {
-        if (! $this->entityManager instanceof EntityManager) {
-            $this->setEntityManager($this->getServiceLocator()->get('doctrine.entitymanager.orm_default'));
+        if (! $this->objectManager instanceof EntityManager) {
+            $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManager()));
         }
-        return $this->entityManager;
+        return $this->objectManager;
     }
 
     /**
      * Set entityManager
      *
-     * @param  EntityManager $entityManager
+     * @param  EntityManager $objectManager
      * @return AbstractEventLogger
      */
-    public function setEntityManager(EntityManager $entityManager)
+    public function setObjectManager(EntityManager $objectManager)
     {
-        $this->entityManager = $entityManager;
+        $this->objectManager = $objectManager;
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return ModuleOptions
+     */
+    public function getOptions()
+    {
+        if (! $this->options instanceof ModuleOptions) {
+            $this->setOptions($this->getServiceLocator()->get('atanslogger_module_options'));
+        }
+        return $this->options;
+    }
+
+    /**
+     * Set options
+     *
+     * @param  ModuleOptions $options
+     * @return AbstractEventLogger
+     */
+    public function setOptions(ModuleOptions $options)
+    {
+        $this->options = $options;
         return $this;
     }
 

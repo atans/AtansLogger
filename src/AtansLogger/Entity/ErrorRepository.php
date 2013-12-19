@@ -11,7 +11,6 @@ class ErrorRepository extends EntityRepository
 {
     public function pagination($data)
     {
-
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('e')
