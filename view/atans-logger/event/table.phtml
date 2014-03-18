@@ -1,5 +1,12 @@
 <?php
 namespace AtansLogger;
+
+/**
+ * @var \Zend\Paginator\Paginator $paginator
+ */
+$paginator = $this->paginator;
+
+$isXmlHttpRequest = $this->isXmlHttpRequest;
 ?>
 
 <?php if (! $isXmlHttpRequest || ($isXmlHttpRequest && $paginator->getCurrentPageNumber() < 2)): ?>

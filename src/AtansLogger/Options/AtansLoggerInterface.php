@@ -20,17 +20,17 @@ interface AtansLoggerInterface
     public function getAuthenticationService();
 
     /**
-     * Get objectManager
+     * Get objectManagerName
      *
      * @return string
      */
-    public function getObjectManager();
+    public function getObjectManagerName();
 
     /**
-     * Set objectManager
+     * Set objectManagerName
      *
-     * @param  string $objectManager
+     * @param  string $objectManagerName
      * @return ModuleOptions
      */
-    public function setObjectManager($objectManager);
+    public function setObjectManagerName($objectManagerName);
 }

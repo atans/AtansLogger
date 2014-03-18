@@ -6,6 +6,11 @@ use Zend\Mvc\MvcEvent;
 
 class Module
 {
+    /**
+     * Translator text domain
+     */
+    const TRANSLATOR_TEXT_DOMAIN = __NAMESPACE__;
+
     public function onBootstrap(MvcEvent $e)
     {
         $serviceManager = $e->getApplication()->getServiceManager();

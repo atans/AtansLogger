@@ -26,7 +26,7 @@ class ErrorController extends AbstractActionController
 
     public function indexAction()
     {
-        $objectManager = $this->objectManager($this->getOptions()->getObjectManager());
+        $objectManager = $this->objectManager($this->getOptions()->getObjectManagerName());
         $request       = $this->getRequest();
 
         $data = array(

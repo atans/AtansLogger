@@ -47,7 +47,7 @@ abstract class AbstractEventLogger implements ServiceLocatorAwareInterface
     public function getObjectManager()
     {
         if (! $this->objectManager instanceof EntityManager) {
-            $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManager()));
+            $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManagerName()));
         }
         return $this->objectManager;
     }

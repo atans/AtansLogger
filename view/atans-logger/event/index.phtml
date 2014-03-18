@@ -1,24 +1,18 @@
 <?php
-namespace AtansLogger;
+use AtansLogger\Module;
 
 $title = $this->translate('Event log', __NAMESPACE__);
 $this->headTitle($title);
 
-$pagination = '';
-if (count($this->paginator)) {
-    $pagination =  $this->paginationControl(
-        $this->paginator,
-        'Sliding',
-        'pagination/query',
-        array(
-            'route' => 'atanslogger/event',
-            'options' => array(
-                'query' => $form->getData(),
-            ),
-        )
-    );
-}
+/**
+ * @var \Zend\Form\Form $form
+ */
+$form = $this->form;
 
+/**
+ * @var \Zend\Paginator\Paginator $paginator
+ */
+$pagination = $this->paginator;
 ?>
 
 <h4 class="page-header">
@@ -33,7 +27,7 @@ if (count($this->paginator)) {
 
         <?php echo $this->render('atans-logger/event/table', array(
             'paginator'         => $paginator,
-            'isXmlHttpRequest'  => $isXmlHttpRequest,
+            'isXmlHttpRequest'  => $this->isXmlHttpRequest,
         ))?>
 
     <?php else: ?>
@@ -42,10 +36,20 @@ if (count($this->paginator)) {
             <br>
 
             <div class="alert alert-info">
-                <?php echo $this->translate('Could not find any logs', __NAMESPACE__) ?>
+                <?php echo $this->translate('Could not find any logs', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </div>
         </div>
     <?php endif ?>
 </div>
 
-<?php echo $pagination ; ?>
+<?php echo $pagination =  $this->paginationControl(
+    $this->paginator,
+    'Sliding',
+    'pagination/query',
+    array(
+        'route' => 'atanslogger/event',
+        'options' => array(
+            'query' => $form->getData(),
+        ),
+    )
+); ?>

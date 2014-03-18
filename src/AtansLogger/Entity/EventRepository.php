@@ -86,7 +86,7 @@ class EventRepository extends EntityRepository
 
         if (!isset($data['page']) || !isset($data['count'])) {
             throw new Exception\InvalidArgumentException(
-                "'page' and 'size' are must be defined"
+                "'page' and 'count' are must be defined"
             );
         }
 

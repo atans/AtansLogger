@@ -33,7 +33,7 @@ class EventController extends AbstractActionController
 
     public function indexAction()
     {
-        $objectManager = $this->objectManager($this->getOptions()->getObjectManager());
+        $objectManager = $this->objectManager($this->getOptions()->getObjectManagerName());
         $request       = $this->getRequest();
 
         $eventRepository = $objectManager->getRepository($this->entities['Event']);

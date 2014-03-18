@@ -9,11 +9,6 @@ class ModuleOptions extends AbstractOptions implements
     EventInterface
 {
     /**
-     * Turn off strict options mode
-     */
-    protected $__strictMode__ = false;
-
-    /**
      * @var string
      */
     protected $authenticationService = 'Zend\Authentication\AuthenticationService';
@@ -21,7 +16,7 @@ class ModuleOptions extends AbstractOptions implements
     /**
      * @var string
      */
-    protected $objectManager = 'doctrine.entitymanager.orm_default';
+    protected $objectManagerName = 'doctrine.entitymanager.orm_default';
 
     /**
      * @var int
@@ -66,25 +61,25 @@ class ModuleOptions extends AbstractOptions implements
     }
 
     /**
-     * Set objectManager
+     * Set objectManagerName
      *
-     * @param  string $objectManager
+     * @param  string $objectManagerName
      * @return ModuleOptions
      */
-    public function setObjectManager($objectManager)
+    public function setObjectManagerName($objectManagerName)
     {
-        $this->objectManager = $objectManager;
+        $this->objectManagerName = $objectManagerName;
         return $this;
     }
 
     /**
-     * Get objectManager
+     * Get objectManagerName
      *
      * @return string
      */
-    public function getObjectManager()
+    public function getObjectManagerName()
     {
-        return $this->objectManager;
+        return $this->objectManagerName;
     }
 
     /**

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Atans User\n"
-"POT-Creation-Date: 2013-12-13 14:34+0800\n"
-"PO-Revision-Date: 2013-12-13 14:34+0800\n"
+"POT-Creation-Date: 2014-03-18 09:18+0800\n"
+"PO-Revision-Date: 2014-03-18 09:18+0800\n"
 "Last-Translator: atans <atans.chiu@gmail.com>\n"
 "Language-Team: atans <atans.chiu@gmail.com>\n"
 "Language: zh_TW\n"
@@ -15,21 +15,21 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../src/AtansLogger/Form/ErrorSearchForm.php:34
+#: ../src/AtansLogger/Form/ErrorSearchForm.php:43
 msgid "Priority"
 msgstr "權重"
 
-#: ../src/AtansLogger/Form/EventSearchForm.php:54
-#: ../view/atans-logger/event/partial.phtml:9
+#: ../src/AtansLogger/Form/EventSearchForm.php:70
+#: ../view/atans-logger/event/partial.phtml:21
 msgid "Creator"
 msgstr "建立者"
 
-#: ../src/AtansLogger/Form/EventSearchForm.php:74
+#: ../src/AtansLogger/Form/EventSearchForm.php:90
 msgid "Target"
 msgstr "目標"
 
-#: ../src/AtansLogger/Form/EventSearchForm.php:82
-#: ../view/atans-logger/event/partial.phtml:33
+#: ../src/AtansLogger/Form/EventSearchForm.php:98
+#: ../view/atans-logger/event/partial.phtml:45
 msgid "Event name"
 msgstr "事件名稱"
 
@@ -37,36 +37,36 @@ msgstr "事件名稱"
 msgid "Error log"
 msgstr "錯誤日誌"
 
-#: ../view/atans-logger/error/index.phtml:39
+#: ../view/atans-logger/error/index.phtml:29
 msgid "Error"
 msgstr "錯誤"
 
-#: ../view/atans-logger/error/index.phtml:54
-#: ../view/atans-logger/event/index.phtml:45
-#: ../view/atans-logger/event/table.phtml:31
+#: ../view/atans-logger/error/index.phtml:44
+#: ../view/atans-logger/event/index.phtml:39
+#: ../view/atans-logger/event/table.phtml:37
 msgid "Could not find any logs"
 msgstr "找不到任何日誌"
 
-#: ../view/atans-logger/error/partial.phtml:17
-#: ../view/atans-logger/event/partial.phtml:27
+#: ../view/atans-logger/error/partial.phtml:21
+#: ../view/atans-logger/event/partial.phtml:39
 msgid "Date"
 msgstr "日期"
 
-#: ../view/atans-logger/error/partial.phtml:18
+#: ../view/atans-logger/error/partial.phtml:22
 msgid "File"
 msgstr "文件"
 
-#: ../view/atans-logger/error/partial.phtml:19
+#: ../view/atans-logger/error/partial.phtml:23
 msgid "Line"
 msgstr "行數"
 
-#: ../view/atans-logger/error/partial.phtml:20
-#: ../view/atans-logger/event/table.phtml:14
+#: ../view/atans-logger/error/partial.phtml:24
+#: ../view/atans-logger/event/table.phtml:21
 msgid "Message"
 msgstr "信息"
 
-#: ../view/atans-logger/error/search-form.phtml:12
-#: ../view/atans-logger/event/search-form.phtml:12
+#: ../view/atans-logger/error/search-form.phtml:15
+#: ../view/atans-logger/event/search-form.phtml:15
 msgid "Count per page"
 msgstr "數量"
 
@@ -74,24 +74,24 @@ msgstr "數量"
 msgid "Event log"
 msgstr "事件日誌"
 
-#: ../view/atans-logger/event/partial.phtml:19
+#: ../view/atans-logger/event/partial.phtml:31
 msgid "No record found"
 msgstr "找不到記錄"
 
-#: ../view/atans-logger/event/partial.phtml:24
+#: ../view/atans-logger/event/partial.phtml:36
 msgid "Ip address"
 msgstr "IP地址"
 
-#: ../view/atans-logger/event/partial.phtml:30
+#: ../view/atans-logger/event/partial.phtml:42
 msgid "Event target"
 msgstr "事件目標"
 
-#: ../view/atans-logger/event/partial.phtml:37
-#: ../view/atans-logger/event/search-form.phtml:31
+#: ../view/atans-logger/event/partial.phtml:49
+#: ../view/atans-logger/event/search-form.phtml:34
 msgid "Object id"
 msgstr "物件ID"
 
-#: ../view/atans-logger/event/table.phtml:11
+#: ../view/atans-logger/event/table.phtml:18
 msgid "Event"
 msgstr "事件"
 

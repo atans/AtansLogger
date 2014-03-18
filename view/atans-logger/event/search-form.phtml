@@ -1,6 +1,9 @@
 <?php
-namespace AtansLogger;
+use AtansLogger\Module;
 
+/**
+ * @var \Zend\Form\Form $form
+ */
 $form = $this->form;
 $form->setAttribute('action', $this->url('atanslogger/event'));
 $form->prepare();
@@ -9,7 +12,7 @@ $form->prepare();
     <div class="form-group">
         <div class="input-group">
             <div class="input-group-addon">
-                <?php echo $this->translate('Count per page', __NAMESPACE__) ?>
+                <?php echo $this->translate('Count per page', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </div>
             <?php echo $this->formInput($form->get('count')) ?>
         </div>
@@ -28,7 +31,7 @@ $form->prepare();
     <div class="form-group">
         <div class="input-group">
             <div class="input-group-addon">
-                <?php echo $this->translate('Object id', __NAMESPACE__) ?>
+                <?php echo $this->translate('Object id', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </div>
             <?php echo $this->formInput($form->get('objectId')) ?>
         </div>

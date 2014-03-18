@@ -1,8 +1,9 @@
 <?php
 namespace AtansLogger\Form;
 
+use AtansLogger\Module;
 use Zend\Form\Element;
-use Zend\I18n\Translator\Translator;
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
@@ -10,17 +11,12 @@ use ZfcBase\Form\ProvidesEventsForm;
 class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
     /**
-     * Translator text domain
-     */
-    const TRANSLATOR_TEXT_DOMAIN = 'AtansLogger';
-
-    /**
      * @var ServiceManager
      */
     protected $serviceManager;
 
     /**
-     * @var Translator
+     * @var TranslatorInterface
      */
     protected $translator;
 
@@ -44,7 +40,7 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $priority = new Element\Select('priority');
         $priority->setAttribute('class', 'form-control');
         $priority->setOptions(array(
-            'empty_option' => sprintf('== %s ==', $this->getTranslator()->translate('Priority', static::TRANSLATOR_TEXT_DOMAIN)),
+            'empty_option' => sprintf('== %s ==', $this->getTranslator()->translate('Priority', Module::TRANSLATOR_TEXT_DOMAIN)),
             'value_options' => $this->getServiceManager()->get('zend_log_logger_priorities'),
         ));
         $this->add($priority);
@@ -126,7 +122,7 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
      */
     public function getTranslator()
     {
-        if (! $this->translator instanceof Translator) {
+        if (! $this->translator instanceof TranslatorInterface) {
             $this->setTranslator($this->getServiceManager()->get('Translator'));
         }
         return $this->translator;
@@ -135,10 +131,10 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     /**
      * Set translator
      *
-     * @param  Translator $translator
+     * @param  TranslatorInterface $translator
      * @return ErrorSearchForm
      */
-    public function setTranslator(Translator $translator)
+    public function setTranslator(TranslatorInterface $translator)
     {
         $this->translator = $translator;
         return $this;

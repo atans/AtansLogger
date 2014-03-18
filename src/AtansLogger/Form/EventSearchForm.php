@@ -1,22 +1,18 @@
 <?php
 namespace AtansLogger\Form;
 
+use AtansLogger\Module;
 use AtansLogger\Options\ModuleOptions;
 use AtansLogger\Service\Event as EventService;
 use Doctrine\ORM\EntityManager;
 use Zend\Form\Element;
-use Zend\I18n\Translator\Translator;
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\Form\ProvidesEventsForm;
 
 class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
-    /**
-     * Translator text domain
-     */
-    const TRANSLATOR_TEXT_DOMAIN = 'AtansLogger';
-
     /**
      * @var array
      */
@@ -45,7 +41,7 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     protected $serviceManager;
 
     /**
-     * @var Translator
+     * @var TranslatorInterface
      */
     protected $translator;
 
@@ -71,7 +67,7 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $createdBy->setAttributes(array(
             'class' => 'form-control',
         ))->setOptions(array(
-            'empty_option' => sprintf('== %s ==', $translator->translate('Creator', static::TRANSLATOR_TEXT_DOMAIN)),
+            'empty_option' => sprintf('== %s ==', $translator->translate('Creator', Module::TRANSLATOR_TEXT_DOMAIN)),
             'value_options' => $this->getObjectManager()->getRepository($this->entities['Event'])->findCreators(),
         ));
         $this->add($createdBy);
@@ -91,7 +87,7 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $target = new Element\Select('target');
         $target->setAttribute('class', 'form-control');
         $target->setOptions(array(
-            'empty_option' => sprintf('== %s ==', $translator->translate('Target', static::TRANSLATOR_TEXT_DOMAIN)),
+            'empty_option' => sprintf('== %s ==', $translator->translate('Target', Module::TRANSLATOR_TEXT_DOMAIN)),
             'value_options' => $events,
         ));
         $this->add($target);
@@ -99,7 +95,7 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $name = new Element\Select('name');
         $name->setAttribute('class', 'form-control');
         $name->setOptions(array(
-            'empty_option' => sprintf('== %s ==', $translator->translate('Event name', static::TRANSLATOR_TEXT_DOMAIN)),
+            'empty_option' => sprintf('== %s ==', $translator->translate('Event name', Module::TRANSLATOR_TEXT_DOMAIN)),
         ));
         $this->add($name);
 
@@ -226,7 +222,7 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     public function getObjectManager()
     {
         if (! $this->objectManager instanceof EntityManager) {
-            $objectManager = $this->getServiceManager()->get($this->getModuleOptions()->getObjectManager());
+            $objectManager = $this->getServiceManager()->get($this->getModuleOptions()->getObjectManagerName());
             $this->setObjectManager($objectManager);
         }
         return $this->objectManager;
@@ -269,11 +265,11 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     /**
      * Get translator
      *
-     * @return Translator
+     * @return TranslatorInterface
      */
     public function getTranslator()
     {
-        if (! $this->translator instanceof Translator) {
+        if (! $this->translator instanceof TranslatorInterface) {
             $this->setTranslator($this->getServiceManager()->get('Translator'));
         }
         return $this->translator;
@@ -282,10 +278,10 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     /**
      * Set translator
      *
-     * @param  Translator $translator
+     * @param  TranslatorInterface $translator
      * @return EventSearchForm
      */
-    public function setTranslator(Translator $translator)
+    public function setTranslator(TranslatorInterface $translator)
     {
         $this->translator = $translator;
         return $this;

@@ -1,24 +1,14 @@
 <?php
-namespace AtansLogger;
+use AtansLogger\Module;
 
-$title = $this->translate('Error log', __NAMESPACE__);
+$title = $this->translate('Error log', Module::TRANSLATOR_TEXT_DOMAIN);
 $this->headTitle($title);
 
-$pagination = '';
-if (count($this->paginator)) {
-    $pagination =  $this->paginationControl(
-        $this->paginator,
-        'Sliding',
-        'pagination/query',
-        array(
-            'route' => 'atanslogger/error',
-            'options' => array(
-                'query' => $form->getData(),
-            ),
-        )
-    );
-}
 
+/**
+ * @var \Zend\Form\Form $form
+ */
+$form = $this->form;
 ?>
 
 <h4 class="page-header">
@@ -36,7 +26,7 @@ if (count($this->paginator)) {
             <thead>
             <tr>
                 <th class="col-lg-1 col-md-1 col-sm-1">#</th>
-                <th class="col-lg-11 col-md-11 col-sm-11"><?php echo $this->translate('Error', __NAMESPACE__) ?></th>
+                <th class="col-lg-11 col-md-11 col-sm-11"><?php echo $this->translate('Error', Module::TRANSLATOR_TEXT_DOMAIN) ?></th>
             </tr>
             </thead>
             <?php
@@ -51,10 +41,20 @@ if (count($this->paginator)) {
             <br>
 
             <div class="alert alert-info">
-                <?php echo $this->translate('Could not find any logs', __NAMESPACE__) ?>
+                <?php echo $this->translate('Could not find any logs', Module::TRANSLATOR_TEXT_DOMAIN) ?>
             </div>
         </div>
     <?php endif ?>
 </div>
 
-<?php echo $pagination ; ?>
+<?php echo $pagination =  $this->paginationControl(
+    $this->paginator,
+    'Sliding',
+    'pagination/query',
+    array(
+        'route' => 'atanslogger/error',
+        'options' => array(
+            'query' => $form->getData(),
+        ),
+    )
+); ?>

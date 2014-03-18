@@ -105,7 +105,7 @@ class Logger implements ServiceLocatorAwareInterface
     public function getObjectManager()
     {
         if (!$this->objectManager instanceof EntityManager) {
-            $objectManager = $this->getServiceLocator()->get($this->getOptions()->getObjectManager());
+            $objectManager = $this->getServiceLocator()->get($this->getOptions()->getObjectManagerName());
             $this->setObjectManager($objectManager);
         }
         return $this->objectManager;
