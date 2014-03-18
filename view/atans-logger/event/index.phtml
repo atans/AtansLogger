@@ -12,7 +12,7 @@ $form = $this->form;
 /**
  * @var \Zend\Paginator\Paginator $paginator
  */
-$pagination = $this->paginator;
+$paginator = $this->paginator;
 ?>
 
 <h4 class="page-header">
@@ -42,7 +42,7 @@ $pagination = $this->paginator;
     <?php endif ?>
 </div>
 
-<?php echo $pagination =  $this->paginationControl(
+<?php echo $this->paginationControl(
     $this->paginator,
     'Sliding',
     'pagination/query',

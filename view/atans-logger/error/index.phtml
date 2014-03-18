@@ -9,13 +9,25 @@ $this->headTitle($title);
  * @var \Zend\Form\Form $form
  */
 $form = $this->form;
+
+$pagination = $this->paginationControl(
+    $this->paginator,
+    'Sliding',
+    'pagination/query',
+    array(
+        'route' => 'atanslogger/error',
+        'options' => array(
+            'query' => $form->getData(),
+        ),
+    )
+);
 ?>
 
 <h4 class="page-header">
     <?php echo $this->escapeHtml($title) ?>
 </h4>
 
-<?php echo $pagination ; ?>
+<?php echo $pagination ?>
 <div class="panel panel-default">
     <?php if (count($paginator) > 0): ?>
         <div class="panel-body">
@@ -47,14 +59,4 @@ $form = $this->form;
     <?php endif ?>
 </div>
 
-<?php echo $pagination =  $this->paginationControl(
-    $this->paginator,
-    'Sliding',
-    'pagination/query',
-    array(
-        'route' => 'atanslogger/error',
-        'options' => array(
-            'query' => $form->getData(),
-        ),
-    )
-); ?>
+<?php echo $pagination ?>
