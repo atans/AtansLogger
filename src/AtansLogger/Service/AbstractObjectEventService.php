@@ -7,6 +7,7 @@ use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcBase\EventManager\EventProvider;
+use ZfcRbac\Service\AuthorizationService;
 
 abstract class AbstractObjectEventService extends EventProvider implements ServiceLocatorAwareInterface
 {
@@ -19,6 +20,11 @@ abstract class AbstractObjectEventService extends EventProvider implements Servi
      * @var AuthenticationService
      */
     protected $authenticationService;
+
+    /**
+     * @var AuthorizationService
+     */
+    protected $authorizationService;
 
     /**
      * @var EntityManager
@@ -85,6 +91,31 @@ abstract class AbstractObjectEventService extends EventProvider implements Servi
     public function setAuthenticationService(AuthenticationService $authenticationService)
     {
         $this->authenticationService = $authenticationService;
+        return $this;
+    }
+
+    /**
+     * Get authorizationService
+     *
+     * @return AuthorizationService
+     */
+    public function getAuthorizationService()
+    {
+        if (! $this->authorizationService instanceof AuthorizationService) {
+            $this->setAuthorizationService($this->getServiceLocator()->get('ZfcRbac\Authorization\Service'));
+        }
+        return $this->authorizationService;
+    }
+
+    /**
+     * Set authorizationService
+     *
+     * @param  AuthorizationService $authorizationService
+     * @return AbstractObjectEventService
+     */
+    public function setAuthorizationService(AuthorizationService $authorizationService)
+    {
+        $this->authorizationService = $authorizationService;
         return $this;
     }
 
