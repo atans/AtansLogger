@@ -102,7 +102,7 @@ abstract class AbstractObjectEventService extends EventProvider implements Servi
     public function getAuthorizationService()
     {
         if (! $this->authorizationService instanceof AuthorizationService) {
-            $this->setAuthorizationService($this->getServiceLocator()->get('ZfcRbac\Authorization\Service'));
+            $this->setAuthorizationService($this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService'));
         }
         return $this->authorizationService;
     }
