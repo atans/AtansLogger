@@ -41,7 +41,7 @@ class Logger implements ServiceLocatorAwareInterface
      * Log a event record
      *
      * @param  string $target
-     * @param  string $name
+     * @param  string|object $name
      * @param  string|null $message
      * @param  int|null $objectId
      * @param  User|null $createdBy
@@ -49,7 +49,11 @@ class Logger implements ServiceLocatorAwareInterface
      */
     public function log($target, $name, $message = null, $objectId = null, User $createdBy = null)
     {
-        if (!$createdBy) {
+        if (is_object($name)) {
+            $name = get_class($name);
+        }
+
+        if (! $createdBy) {
             $createdBy = $this->getAuthenticationService()->getIdentity();
         }
 
@@ -58,13 +62,13 @@ class Logger implements ServiceLocatorAwareInterface
 
         $event = new \AtansLogger\Entity\Event();
         $event->setTarget($target)
-              ->setName($name)
-              ->setMessage($message)
-              ->setObjectId($objectId)
-              ->setCreated(new DateTime())
-              ->setCreatedBy($createdBy)
-              ->setIpAddress($ipAddress)
-              ->setUsername($username);
+            ->setName($name)
+            ->setMessage($message)
+            ->setObjectId($objectId)
+            ->setCreated(new DateTime())
+            ->setCreatedBy($createdBy)
+            ->setIpAddress($ipAddress)
+            ->setUsername($username);
 
         $this->getObjectManager()->persist($event);
         $this->getObjectManager()->flush();

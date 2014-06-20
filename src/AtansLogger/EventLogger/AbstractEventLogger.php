@@ -2,7 +2,7 @@
 namespace AtansLogger\EventLogger;
 
 use AtansLogger\Options\ModuleOptions;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use AtansLogger\Service\Logger as LoggerService;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -10,7 +10,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 abstract class AbstractEventLogger implements ServiceLocatorAwareInterface
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $objectManager;
 
@@ -42,11 +42,11 @@ abstract class AbstractEventLogger implements ServiceLocatorAwareInterface
     /**
      * Get entityManager
      *
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     public function getObjectManager()
     {
-        if (! $this->objectManager instanceof EntityManager) {
+        if (! $this->objectManager instanceof EntityManagerInterface) {
             $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManagerName()));
         }
         return $this->objectManager;
@@ -55,10 +55,10 @@ abstract class AbstractEventLogger implements ServiceLocatorAwareInterface
     /**
      * Set entityManager
      *
-     * @param  EntityManager $objectManager
+     * @param  EntityManagerInterface $objectManager
      * @return AbstractEventLogger
      */
-    public function setObjectManager(EntityManager $objectManager)
+    public function setObjectManager(EntityManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
         return $this;

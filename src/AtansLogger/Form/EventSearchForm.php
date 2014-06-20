@@ -4,11 +4,11 @@ namespace AtansLogger\Form;
 use AtansLogger\Module;
 use AtansLogger\Options\ModuleOptions;
 use AtansLogger\Service\Event as EventService;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Zend\Form\Element;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcBase\Form\ProvidesEventsForm;
 
 class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
@@ -31,14 +31,14 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     protected $moduleOptions;
 
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @var ServiceManager
+     * @var ServiceLocatorInterface
      */
-    protected $serviceManager;
+    protected $serviceLocator;
 
     /**
      * @var TranslatorInterface
@@ -48,16 +48,16 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     /**
      * Initialization
      *
-     * @param ServiceManager $serviceManager
+     * @param ServiceLocatorInterface $serviceLocator
      */
-    public function __construct(ServiceManager $serviceManager)
+    public function __construct(ServiceLocatorInterface $serviceLocator)
     {
         parent::__construct('event-search-form');
         $this->setAttribute('method', 'get');
         $this->setAttribute('class', 'form-inline');
         $this->setAttribute('role', 'form');
 
-        $this->setServiceManager($serviceManager);
+        $this->setServiceLocator($serviceLocator);
         $translator   = $this->getTranslator();
 
         $page = new Element\Hidden('page');
@@ -67,7 +67,13 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $createdBy->setAttributes(array(
             'class' => 'form-control',
         ))->setOptions(array(
-            'empty_option' => sprintf('== %s ==', $translator->translate('Creator', Module::TRANSLATOR_TEXT_DOMAIN)),
+            'empty_option' => sprintf(
+                '== %s ==',
+                $translator->translate(
+                    'Creator',
+                    Module::TRANSLATOR_TEXT_DOMAIN
+                )
+            ),
             'value_options' => $this->getObjectManager()->getRepository($this->entities['Event'])->findCreators(),
         ));
         $this->add($createdBy);
@@ -87,7 +93,13 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $target = new Element\Select('target');
         $target->setAttribute('class', 'form-control');
         $target->setOptions(array(
-            'empty_option' => sprintf('== %s ==', $translator->translate('Target', Module::TRANSLATOR_TEXT_DOMAIN)),
+            'empty_option' => sprintf(
+                '== %s ==',
+                $translator->translate(
+                    'Target',
+                    Module::TRANSLATOR_TEXT_DOMAIN
+                )
+            ),
             'value_options' => $events,
         ));
         $this->add($target);
@@ -95,7 +107,13 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $name = new Element\Select('name');
         $name->setAttribute('class', 'form-control');
         $name->setOptions(array(
-            'empty_option' => sprintf('== %s ==', $translator->translate('Event name', Module::TRANSLATOR_TEXT_DOMAIN)),
+            'empty_option' => sprintf(
+                '== %s ==',
+                $translator->translate(
+                    'Event name',
+                    Module::TRANSLATOR_TEXT_DOMAIN
+                )
+            ),
         ));
         $this->add($name);
 
@@ -171,7 +189,7 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     public function getEventService()
     {
         if (! $this->eventService instanceof EventService) {
-            $this->setEventService($this->getServiceManager()->get('atanslogger_event_service'));
+            $this->setEventService($this->getServiceLocator()->get('atanslogger_event_service'));
         }
         return $this->eventService;
     }
@@ -196,7 +214,7 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     public function getModuleOptions()
     {
         if (! $this->moduleOptions instanceof ModuleOptions) {
-            $this->setModuleOptions($this->getServiceManager()->get('atanslogger_module_options'));
+            $this->setModuleOptions($this->getServiceLocator()->get('atanslogger_module_options'));
         }
         return $this->moduleOptions;
     }
@@ -217,48 +235,47 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     /**
      * Get entityManager
      *
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     public function getObjectManager()
     {
-        if (! $this->objectManager instanceof EntityManager) {
-            $objectManager = $this->getServiceManager()->get($this->getModuleOptions()->getObjectManagerName());
-            $this->setObjectManager($objectManager);
+        if (! $this->objectManager instanceof EntityManagerInterface) {
+            $this->setObjectManager($this->getServiceLocator()->get($this->getModuleOptions()->getObjectManagerName()));
         }
         return $this->objectManager;
     }
 
     /**
-     * Set entityManager
+     * Set objectManager
      *
-     * @param  EntityManager $objectManager
+     * @param  EntityManagerInterface $objectManager
      * @return EventSearchForm
      */
-    public function setObjectManager(EntityManager $objectManager)
+    public function setObjectManager(EntityManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
         return $this;
     }
 
     /**
-     * Get serviceManager
+     * Get serviceLocator
      *
-     * @return ServiceManager
+     * @return ServiceLocatorInterface
      */
-    public function getServiceManager()
+    public function getServiceLocator()
     {
-        return $this->serviceManager;
+        return $this->serviceLocator;
     }
 
     /**
-     * Set serviceManager
+     * Set serviceLocator
      *
-     * @param  ServiceManager $serviceManager
-     * @return ErrorSearchForm
+     * @param  ServiceLocatorInterface $serviceLocator
+     * @return EventSearchForm
      */
-    public function setServiceManager(ServiceManager $serviceManager)
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-        $this->serviceManager = $serviceManager;
+        $this->serviceLocator = $serviceLocator;
         return $this;
     }
 
@@ -270,7 +287,7 @@ class EventSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     public function getTranslator()
     {
         if (! $this->translator instanceof TranslatorInterface) {
-            $this->setTranslator($this->getServiceManager()->get('Translator'));
+            $this->setTranslator($this->getServiceLocator()->get('Translator'));
         }
         return $this->translator;
     }

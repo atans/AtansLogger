@@ -5,15 +5,15 @@ use AtansLogger\Module;
 use Zend\Form\Element;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcBase\Form\ProvidesEventsForm;
 
 class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderInterface
 {
     /**
-     * @var ServiceManager
+     * @var ServiceLocatorInterface
      */
-    protected $serviceManager;
+    protected $serviceLocator;
 
     /**
      * @var TranslatorInterface
@@ -23,16 +23,16 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     /**
      * Initialization
      *
-     * @param ServiceManager $serviceManager
+     * @param ServiceLocatorInterface $serviceLocator
      */
-    public function __construct(ServiceManager $serviceManager)
+    public function __construct(ServiceLocatorInterface $serviceLocator)
     {
         parent::__construct('error-search-form');
         $this->setAttribute('method', 'get');
         $this->setAttribute('class', 'form-inline');
         $this->setAttribute('role', 'form');
 
-        $this->setServiceManager($serviceManager);
+        $this->setServiceLocator($serviceLocator);
 
         $page = new Element\Hidden('page');
         $this->add($page);
@@ -40,8 +40,14 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
         $priority = new Element\Select('priority');
         $priority->setAttribute('class', 'form-control');
         $priority->setOptions(array(
-            'empty_option' => sprintf('== %s ==', $this->getTranslator()->translate('Priority', Module::TRANSLATOR_TEXT_DOMAIN)),
-            'value_options' => $this->getServiceManager()->get('zend_log_logger_priorities'),
+            'empty_option' => sprintf(
+                '== %s ==',
+                $this->getTranslator()->translate(
+                    'Priority',
+                    Module::TRANSLATOR_TEXT_DOMAIN
+                )
+            ),
+            'value_options' => $serviceLocator->get('zend_log_logger_priorities'),
         ));
         $this->add($priority);
 
@@ -94,36 +100,36 @@ class ErrorSearchForm extends ProvidesEventsForm implements InputFilterProviderI
     }
 
     /**
-     * Get serviceManager
+     * Get serviceLocator
      *
-     * @return ServiceManager
+     * @return ServiceLocatorInterface
      */
-    public function getServiceManager()
+    public function getServiceLocator()
     {
-        return $this->serviceManager;
+        return $this->serviceLocator;
     }
 
     /**
-     * Set serviceManager
+     * Set serviceLocator
      *
-     * @param  ServiceManager $serviceManager
+     * @param  ServiceLocatorInterface $serviceLocator
      * @return ErrorSearchForm
      */
-    public function setServiceManager(ServiceManager $serviceManager)
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-        $this->serviceManager = $serviceManager;
+        $this->serviceLocator = $serviceLocator;
         return $this;
     }
 
     /**
      * Get translator
      *
-     * @return Translator
+     * @return TranslatorInterface
      */
     public function getTranslator()
     {
         if (! $this->translator instanceof TranslatorInterface) {
-            $this->setTranslator($this->getServiceManager()->get('Translator'));
+            $this->setTranslator($this->getServiceLocator()->get('Translator'));
         }
         return $this->translator;
     }

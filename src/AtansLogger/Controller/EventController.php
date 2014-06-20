@@ -3,6 +3,7 @@ namespace AtansLogger\Controller;
 
 use AtansLogger\Options\ModuleOptions;
 use AtansLogger\Service\Event as EventService;
+use Doctrine\ORM\EntityManagerInterface;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -27,32 +28,34 @@ class EventController extends AbstractActionController
     protected $eventService;
 
     /**
+     * @var EntityManagerInterface
+     */
+    protected $objectManager;
+
+    /**
      * @var ModuleOptions
      */
     protected $options;
 
     public function indexAction()
     {
-        $objectManager = $this->objectManager($this->getOptions()->getObjectManagerName());
-        $request       = $this->getRequest();
+        $objectManager   = $this->getObjectManager();
+        $request         = $this->getRequest();
+        $eventRepository = $objectManager
+            ->getRepository($this->entities['Event']);
 
-        $eventRepository = $objectManager->getRepository($this->entities['Event']);
-
-        $data = array(
-            'target'    => $request->getQuery('target', ''),
-            'name'      => $request->getQuery('name', ''),
-            'query'     => $request->getQuery('query', ''),
-            'page'      => $request->getQuery('page', 1),
-            'objectId'  => $request->getQuery('objectId', ''),
-            'createdBy' => $request->getQuery('createdBy', ''),
-            'count'     => $request->getQuery('count', $this->getOptions()->getEventCountPerPage()),
+        $queryData = array_merge(array(
+                'page' => 1,
+                'count' => $this->getOptions()->getEventCountPerPage(),
+            ),
+            $request->getQuery()->toArray()
         );
 
         $eventService = $this->getEventService();
         $events       = $eventService->getEvents();
 
         $form = $this->getEventSearchForm();
-        if ($data['target'] && isset($events[$data['target']])) {
+        if (isset($data['target']) && ! empty($data['target']) && isset($events[$data['target']])) {
             $eventNames = $eventService->getEventNames($events[$data['target']]);
             $names = array();
             foreach ($eventNames as $eventName) {
@@ -61,7 +64,7 @@ class EventController extends AbstractActionController
 
             $form->get('name')->setValueOptions($names);
         }
-        $form->setData($data);
+        $form->setData($queryData);
         $form->isValid();
 
         $paginator = $eventRepository->pagination($form->getData());
@@ -139,6 +142,31 @@ class EventController extends AbstractActionController
     public function setEventService(EventService $eventService)
     {
         $this->eventService = $eventService;
+        return $this;
+    }
+
+    /**
+     * Get objectManager
+     *
+     * @return EntityManagerInterface
+     */
+    public function getObjectManager()
+    {
+        if (! $this->objectManager instanceof EntityManagerInterface) {
+            $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManagerName()));
+        }
+        return $this->objectManager;
+    }
+
+    /**
+     * Set objectManager
+     *
+     * @param  EntityManagerInterface $objectManager
+     * @return EventController
+     */
+    public function setObjectManager(EntityManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
         return $this;
     }
 

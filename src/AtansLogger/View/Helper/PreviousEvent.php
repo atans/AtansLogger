@@ -3,7 +3,7 @@ namespace AtansLogger\View\Helper;
 
 use AtansLogger\Entity\EventRepository;
 use AtansLogger\Options\ModuleOptions;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
@@ -23,7 +23,7 @@ class PreviousEvent extends AbstractHelper implements ServiceLocatorAwareInterfa
     protected $eventRepository;
 
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $objectManager;
 
@@ -78,12 +78,12 @@ class PreviousEvent extends AbstractHelper implements ServiceLocatorAwareInterfa
     /**
      * Get objectManager
      *
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     public function getObjectManager()
     {
-        if (! $this->objectManager instanceof EntityManager) {
-            $this->setObjectManager($this->getServiceLocator()->get($this->getOptions()->getObjectManagerName()));
+        if (! $this->objectManager instanceof EntityManagerInterface) {
+            $this->setObjectManager($this->getServiceLocator()->getServiceLocator()->get($this->getOptions()->getObjectManagerName()));
         }
         return $this->objectManager;
     }
@@ -91,10 +91,10 @@ class PreviousEvent extends AbstractHelper implements ServiceLocatorAwareInterfa
     /**
      * Set objectManager
      *
-     * @param  EntityManager $objectManager
+     * @param  EntityManagerInterface $objectManager
      * @return PreviousEvent
      */
-    public function setObjectManager(EntityManager $objectManager)
+    public function setObjectManager(EntityManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
         return $this;
@@ -108,7 +108,7 @@ class PreviousEvent extends AbstractHelper implements ServiceLocatorAwareInterfa
     public function getOptions()
     {
         if (! $this->options instanceof ModuleOptions) {
-            $this->setOptions($this->getServiceLocator()->get('atanslogger_module_options'));
+            $this->setOptions($this->getServiceLocator()->getServiceLocator()->get('atanslogger_module_options'));
         }
         return $this->options;
     }
@@ -132,7 +132,7 @@ class PreviousEvent extends AbstractHelper implements ServiceLocatorAwareInterfa
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-        $this->serviceLocator = $serviceLocator->getServiceLocator();
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**

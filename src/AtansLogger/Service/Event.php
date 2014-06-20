@@ -4,7 +4,7 @@ namespace AtansLogger\Service;
 use AtansLogger\Exception;
 use AtansLogger\EventLogger\AbstractEventLogger;
 use AtansLogger\Options\ModuleOptions;
-use DoctrineORMModule\Options\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use ReflectionClass;
 use Zend\EventManager\SharedEventManagerInterface;
 use Zend\Filter\Word\CamelCaseToSeparator;
@@ -24,7 +24,7 @@ class Event implements ServiceLocatorAwareInterface
     protected $events;
 
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $objectManager;
 
@@ -164,11 +164,11 @@ class Event implements ServiceLocatorAwareInterface
     /**
      * Get entityManager
      *
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     public function getObjectManager()
     {
-        if (! $this->objectManager instanceof EntityManager) {
+        if (! $this->objectManager instanceof EntityManagerInterface) {
             $objectManager = $this->getServiceLocator()->get($this->getOptions()->getObjectManagerName());
             $this->setObjectManager($objectManager);
         }
@@ -178,10 +178,10 @@ class Event implements ServiceLocatorAwareInterface
     /**
      * Set entityManager
      *
-     * @param  EntityManager $objectManager
+     * @param  EntityManagerInterface $objectManager
      * @return Event
      */
-    public function setObjectManager(EntityManager $objectManager)
+    public function setObjectManager(EntityManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
         return $this;
