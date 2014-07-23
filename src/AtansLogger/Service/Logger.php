@@ -6,6 +6,7 @@ use AtansLogger\Options\ModuleOptions;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Zend\Authentication\AuthenticationService;
+use Zend\EventManager\EventInterface;
 use Zend\Http\Request;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -41,7 +42,7 @@ class Logger implements ServiceLocatorAwareInterface
      * Log a event record
      *
      * @param  string $target
-     * @param  string|object $name
+     * @param  string|EventInterface $name
      * @param  string|null $message
      * @param  int|null $objectId
      * @param  User|null $createdBy
@@ -49,8 +50,15 @@ class Logger implements ServiceLocatorAwareInterface
      */
     public function log($target, $name, $message = null, $objectId = null, User $createdBy = null)
     {
-        if (is_object($name)) {
-            $name = get_class($name);
+        if ($target instanceof EventInterface) {
+            $target = $target->getTarget();
+        }
+        if (is_object($target)) {
+            $target = get_class($target);
+        }
+
+        if ($name instanceof EventInterface) {
+            $name = $name->getName();
         }
 
         if (! $createdBy) {
