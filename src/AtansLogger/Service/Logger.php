@@ -65,7 +65,12 @@ class Logger implements ServiceLocatorAwareInterface
             $createdBy = $this->getAuthenticationService()->getIdentity();
         }
 
-        $ipAddress = $this->getRequest()->getServer('REMOTE_ADDR');
+        $ipAddress = null;
+        $request   = $this->getRequest();
+        if ($request instanceof Request) {
+            $ipAddress = $request->getServer('REMOTE_ADDR');
+        }
+
         $username  = $createdBy ? $createdBy->getUsername() : null;
 
         $event = new \AtansLogger\Entity\Event();
