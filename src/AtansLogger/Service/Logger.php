@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Zend\Authentication\AuthenticationService;
 use Zend\EventManager\EventInterface;
 use Zend\Http\Request;
+use Zend\Stdlib\RequestInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -29,7 +30,7 @@ class Logger implements ServiceLocatorAwareInterface
     protected $options;
 
     /**
-     * @var Request
+     * @var RequestInterface
      */
     protected $request;
 
@@ -168,11 +169,11 @@ class Logger implements ServiceLocatorAwareInterface
     /**
      * Get request
      *
-     * @return Request
+     * @return RequestInterface
      */
     public function getRequest()
     {
-        if (!$this->request instanceof Request) {
+        if (!$this->request instanceof RequestInterface) {
             $this->setRequest($this->getServiceLocator()->get('Request'));
         }
         return $this->request;
@@ -181,10 +182,10 @@ class Logger implements ServiceLocatorAwareInterface
     /**
      * Set request
      *
-     * @param  Request $request
+     * @param  RequestInterface $request
      * @return Logger
      */
-    public function setRequest(Request $request)
+    public function setRequest(RequestInterface $request)
     {
         $this->request = $request;
         return $this;
