@@ -44,9 +44,10 @@ class EventController extends AbstractActionController
         $eventRepository = $objectManager
             ->getRepository($this->entities['Event']);
 
-        $queryData = array_merge(array(
-                'page' => 1,
-                'count' => $this->getOptions()->getEventCountPerPage(),
+        $query = array_merge(array(
+            'page'   => 1,
+            'count'  => $this->getOptions()->getEventCountPerPage(),
+            'target' => '',
             ),
             $request->getQuery()->toArray()
         );
@@ -55,8 +56,8 @@ class EventController extends AbstractActionController
         $events       = $eventService->getEvents();
 
         $form = $this->getEventSearchForm();
-        if (isset($data['target']) && ! empty($data['target']) && isset($events[$data['target']])) {
-            $eventNames = $eventService->getEventNames($events[$data['target']]);
+        if (! empty($query['target']) && isset($events[$query['target']])) {
+            $eventNames = $eventService->getEventNames($events[$query['target']]);
             $names = array();
             foreach ($eventNames as $eventName) {
                 $names[$eventName] = $eventName;
@@ -64,7 +65,7 @@ class EventController extends AbstractActionController
 
             $form->get('name')->setValueOptions($names);
         }
-        $form->setData($queryData);
+        $form->setData($query);
         $form->isValid();
 
         $paginator = $eventRepository->pagination($form->getData());
